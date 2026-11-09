@@ -1,12 +1,12 @@
 # verify-checklist.md — 제출 전 검수 절차
 
-체크리스트 본문은 templates/submission-checklist.md. 여기는 실행 순서와 스크립트 사용법.
+체크리스트 본문은 templates/submission-checklist.md. 여기는 실행 순서와 스크립트 사용법. 아래 `${CLAUDE_PLUGIN_ROOT}`는 이 파일에서는 치환되지 않는다. 실제 실행은 `/contest:verify` 절차 1~4의 명령(치환된 플러그인 경로) 그대로 한다.
 
 ## 1. 실행 순서 (`/contest:verify <산출물 경로…>`)
-1. **자리표시**: `python3 -I scripts/scan_placeholders.py <파일> [--plain]` — 제출 본문(txt)은 `--plain`으로 마크다운 잔재까지. 0건이어야 통과.
-2. **문체**: `python3 -I scripts/check_style.py <파일> --genre body|form|slides [--strict]` — S1 0건. 설치돼 있으면 `/humanize-scan`도.
-3. **글자 수**: `python3 -I scripts/count_chars.py <파일> --limit N [--start 표식 --end 표식]` — 줄바꿈 2자 기준으로도 제한 안.
-4. **숫자 추적**: `python3 -I scripts/trace_numbers.py <산출물> --against 30-refine/evidence.md 40-spec/PRD.md 40-spec/SRS.md` — 미추적 0건. 미추적은 E-ID 등록 또는 [예시값]·[가정] 표기 후 제출 전 해소.
+1. **자리표시**: `python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/scan_placeholders.py <파일> [--plain]` — 제출 본문(txt)은 `--plain`으로 마크다운 잔재까지. 0건이어야 통과.
+2. **문체**: `python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/check_style.py <파일> --genre body|form|slides [--strict]` — S1 0건. 설치돼 있으면 `/humanize-scan`도.
+3. **글자 수**: `python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/count_chars.py <파일> --limit N [--start 표식 --end 표식]` — 줄바꿈 2자 기준으로도 제한 안.
+4. **숫자 추적**: `python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/trace_numbers.py <산출물> --against 30-refine/evidence.md 40-spec/PRD.md 40-spec/SRS.md` — 미추적 0건. 미추적은 E-ID 등록 또는 [예시값]·[가정] 표기 후 제출 전 해소.
 5. **fact-checker 서브에이전트**: 숫자 일치, 인용 존재, 요약↔본문 일치, 경쟁 평가 공정성, 산출물 이름 통일, 스펙 밖 내용.
 6. **일관성**: traceability §4 — 새 기능이 목표·KPI·유저플로우·일정·역할·예산·기대효과에 있나. 텍스트판·그림판 일치.
 7. **형식**: 페이지·글자 크기·파일 형식·용량·첨부 개수·파일명·메일 제목·CC.

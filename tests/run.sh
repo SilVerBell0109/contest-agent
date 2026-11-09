@@ -177,4 +177,8 @@ if [ -z "$hits" ]; then echo "ok   topic-strategist writes the 11-row card of te
 hits=$( grep -qF '| # | 질문 | 답(한 문장) | 답이 있는 절 | 근거 E-ID |' templates/judge-review.md || echo "  templates/judge-review.md §6 has no 답이 있는 절 column"
   for f in skills/judge/SKILL.md skills/refine/SKILL.md agents/judge-simulator.md; do grep -qF '라운드 번호' "$f" || echo "  $f: never passes or fills the round number"; done )
 if [ -z "$hits" ]; then echo "ok   judge-review records the answering section and the round number"; else echo "FAIL judge-preview lacks the column refine pre-check 3 reads, or the round stays (라운드 _):"; echo "$hits"; fail=1; fi
+hits=$( grep -rnE '(^|[^/}A-Za-z_-])scripts/[a-z_]+\.py' references templates
+  grep -n 'plan\.md' templates/CLAUDE.workspace.md
+  grep -qF '치환되지 않는다' references/verify-checklist.md || echo "  references/verify-checklist.md: no note that \${CLAUDE_PLUGIN_ROOT} stays literal there" )
+if [ -z "$hits" ]; then echo "ok   references and templates name scripts by plugin path; workspace rules name real files"; else echo "FAIL relative scripts/ paths resolve against the workspace, or the workspace CLAUDE.md names a plan.md it never has:"; echo "$hits"; fail=1; fi
 [ $fail -eq 0 ] && echo "ALL OK" || { echo "SOME FAILED"; exit 1; }
