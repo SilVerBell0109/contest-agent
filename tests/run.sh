@@ -6,6 +6,17 @@ S=scripts; T=tests/samples; fail=0
 expect() { local want=$1; shift; "$@" >/dev/null 2>&1; local got=$?; if [ "$got" -eq "$want" ]; then echo "ok   ($got) $*"; else echo "FAIL (got $got, want $want) $*"; fail=1; fi; }
 expect 1 python3 -I $S/scan_placeholders.py $T/placeholders-and-ai-style.md --plain
 expect 0 python3 -I $S/scan_placeholders.py $T/clean-body.txt --plain
+sp=$(mktemp -d); scanp() { python3 -I $S/scan_placeholders.py "$@"; }
+printf '# {{NAME}} 제안서\n작성일 {{DATE}}\n' > "$sp/var.md";                expect 1 scanp "$sp/var.md"
+printf -- '- [ ] 요강 확인\n* [ ] 양식\n+ [ ] 첨부\n1. [ ] 서명\n10) [ ] 제출\n  - [ ] 들여쓴 항목\n' > "$sp/box.md"
+expect 0 scanp "$sp/box.md"
+expect 1 scanp "$sp/box.md" --plain
+printf '값: [ ]\n[ ]\n배열 []\n' > "$sp/empty.md";                             expect 1 scanp "$sp/empty.md"
+out=$(scanp "$sp/empty.md" 2>&1)
+if echo "$out" | grep -q '합계 3건'; then echo "ok   scan_placeholders flags all 3 empty brackets"; else echo "FAIL scan_placeholders missed an empty bracket"; fail=1; fi
+expect 2 scanp "$T/clean-body.txt" "$sp/none.md"
+expect 2 scanp "$T/clean-body.txt" --allow
+rm -rf "$sp"
 expect 1 python3 -I $S/check_style.py $T/placeholders-and-ai-style.md --genre body
 expect 0 python3 -I $S/check_style.py $T/clean-body.txt --genre body
 expect 0 python3 -I $S/check_style.py $T/clean-body.txt --genre body --strict
