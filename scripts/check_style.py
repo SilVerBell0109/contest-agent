@@ -11,7 +11,7 @@ im-not-ai(humanize-korean)의 심각도 체계(S1 결정적 / S2 3회 이상이�
   --genre form   개조식 양식(소마 기획서처럼 '~다'체·불릿 허용)
   --genre slides 슬라이드 헤드라인(명사구 허용)
   --strict       S2가 3회 이상이면 실패 처리(기본은 S1만 실패)
-종료 코드: 통과 0, 실패 1.
+종료 코드: 통과 0, 실패 1, 사용법 오류·파일 없음 2.
 """
 import json
 import re
@@ -90,7 +90,7 @@ def analyze(text: str, genre: str):
 def verdict(results, strict: bool):
     s1 = sum(r["count"] for r in results if r["severity"] == "S1")
     s2_fail = [r for r in results if r["severity"] == "S2" and r["count"] >= 3]
-    failed = s1 > 0 or (strict and s2_fail)
+    failed = s1 > 0 or (strict and bool(s2_fail))
     return failed, s1, s2_fail
 
 
@@ -100,6 +100,8 @@ def main(argv):
     while i < len(argv):
         a = argv[i]
         if a == "--genre":
+            if i + 1 >= len(argv) or argv[i + 1] not in GENRE_SKIP:
+                print(f"--genre 값은 {'|'.join(GENRE_SKIP)} 중 하나입니다.\n{__doc__}"); return 2
             genre = argv[i + 1]; i += 2; continue
         if a == "--strict":
             strict = True; i += 1; continue
@@ -108,6 +110,9 @@ def main(argv):
         files.append(Path(a)); i += 1
     if not files:
         print(__doc__); return 2
+    missing = [str(f) for f in files if not f.is_file()]
+    if missing:
+        print(f"파일이 없습니다: {', '.join(missing)}"); return 2
     overall_fail = False
     report = {}
     for f in files:

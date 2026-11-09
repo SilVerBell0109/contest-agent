@@ -8,6 +8,15 @@ expect 1 python3 -I $S/scan_placeholders.py $T/placeholders-and-ai-style.md --pl
 expect 0 python3 -I $S/scan_placeholders.py $T/clean-body.txt --plain
 expect 1 python3 -I $S/check_style.py $T/placeholders-and-ai-style.md --genre body
 expect 0 python3 -I $S/check_style.py $T/clean-body.txt --genre body
+expect 0 python3 -I $S/check_style.py $T/clean-body.txt --genre body --strict
+s2=$(mktemp); printf '이 계획에 대한 설명입니다.\n예산에 대한 근거를 적습니다.\n일정에 대한 표를 붙입니다.\n' > "$s2"
+expect 0 python3 -I $S/check_style.py "$s2" --genre body
+out=$(python3 -I $S/check_style.py "$s2" --genre body --strict 2>&1); rc=$?
+if [ $rc -eq 1 ] && echo "$out" | grep -q "실패" && ! echo "$out" | grep -q Traceback; then echo "ok   (1) --strict fails on S2 x3 without crashing"; else echo "FAIL (got $rc) --strict on S2 x3"; fail=1; fi
+rm -f "$s2"
+expect 2 python3 -I $S/check_style.py $T/clean-body.txt --genre essay
+expect 2 python3 -I $S/check_style.py $T/clean-body.txt --genre
+expect 2 python3 -I $S/check_style.py $T/no-such-file.md
 expect 1 python3 -I $S/count_chars.py $T/clean-body.txt --limit 100
 expect 0 python3 -I $S/count_chars.py $T/clean-body.txt --limit 5000
 expect 1 python3 -I $S/trace_numbers.py $T/numbers.md --against $T/evidence.md
