@@ -8,7 +8,7 @@
 | `playbook.md` | 공모전 기획·고도화·제작 플레이북(Google Drive 문서 추출본, 1,091줄). 프로젝트별 상세 기록, 공통 프로세스, 문체·검수 규칙, 재사용 틀 |
 
 ## 사용자가 추가할 것(선택)
-- `~/Downloads/보고서_말투_가이드.md` → `references/style/user-report-tone.md`로 복사하면 문체 기준에서 우선 적용됩니다(`/contest:init`이 물어봅니다).
+- `~/Downloads/보고서_말투_가이드.md` → 플러그인 데이터 폴더(`~/.claude/plugins/data/` 아래)의 `style/user-report-tone.md`로 복사하면 문체 기준에서 우선 적용됩니다(`/contest:init`이 물어봅니다).
 - `korean-report-tone` 스킬이 이미 있으면 `skills/make`의 문체 단계에서 함께 호출하도록 한 줄 추가하세요.
 - 공식 양식 파일(소마 기획서 docx, KIC pptx 템플릿 등)은 각 공모전 작업 공간의 `00-inputs/`에 넣습니다. 이 저장소에는 커밋하지 않습니다.
 

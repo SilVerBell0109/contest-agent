@@ -1,6 +1,6 @@
 # style-ko.md — 한국어 문체 기준
 
-출처: 하나증권 기획서 B-7 문체 기준(2026-11-05), im-not-ai(Humanize KR v2.3.2) 요약, 실제 퇴고 기록. 사용자 자산 `~/Downloads/보고서_말투_가이드.md`와 korean-report-tone 스킬이 있으면 그것이 우선한다(references/style/user-report-tone.md로 복사).
+출처: 하나증권 기획서 B-7 문체 기준(2026-11-05), im-not-ai(Humanize KR v2.3.2) 요약, 실제 퇴고 기록. 사용자 자산 `~/Downloads/보고서_말투_가이드.md`와 korean-report-tone 스킬이 있으면 그것이 우선한다(`/contest:init`이 플러그인 데이터 폴더의 style/user-report-tone.md로 복사).
 
 ## 1. 장르별 기본
 | 장르 | 문체 |
