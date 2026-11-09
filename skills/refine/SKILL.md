@@ -22,12 +22,18 @@ allowed-tools: Bash(python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/trace_numbers.py *)
 5. **경쟁·차별**: 기능 단위 ○△× 비교표(△는 조건부로 인정, 공정하게), "이미 있지 않나"에 대한 한 문장 답, 폐기 후보의 가치를 확장 1순위로 흡수.
 6. **모의 심사**: contest:judge-simulator 호출 → 응답 전문을 `30-refine/judge-preview.md`에 저장(배점표 채점, 예상 질문 10개 + 한 문장 답, 첫 질문). 점수가 깎인 위치를 design.md에 반영. 최대 2회.
 
-## 관문 2 — 자동 점검 4항목(모두 통과해야 다음 단계)
+## 관문 2 전 사전 점검(모두 통과해야 관문 2로 간다)
 1. design.md의 모든 숫자가 E-ID를 가진다: `python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/trace_numbers.py 30-refine/design.md --against 30-refine/evidence.md`(이 형태 그대로, 따옴표 없이, 다른 명령과 `;`·`&&`로 잇지 말고 단독으로 — 허용 규칙과 같아야 승인 없이 실행된다).
 2. 자리표시·메타 문장 없음(가정·예시값·확인 필요 태그는 허용): `python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/scan_placeholders.py 30-refine/design.md --allow 가정,예시값,확인`(실행 방식은 1과 같다).
 3. judge-preview.md의 예상 질문 10개 모두에 "답이 있는 절 번호"가 있다(보강 필요 0).
 4. 심사 기준 항목마다 design.md에 대응 절이 있다(traceability 초안: 심사 기준 ↔ design 절).
-실패 항목은 고치고 다시 돈다. 통과하면 CONTEST.md 3단계 완료, 다음: `/contest:spec`.
+
+## 관문 2 — 자동 점검 4항목(`${CLAUDE_SKILL_DIR}/../../references/process.md` §2, 모두 통과해야 다음 단계)
+1. 문제 크기: E-ID가 달린 숫자 하나 이상으로 문제의 크기를 말한다.
+2. "여기서만 되는 기능"(주최사 자산·의무에서 나온 기능) 둘 이상(design.md 2절).
+3. 범위 경계 문장("~는 우리가 풀 문제가 아니고 ~만 푼다", design.md 1절).
+4. 성공 기준 표(지표·목표·검증 방법, design.md 10절).
+항목마다 확인한 design.md 절 번호를 CONTEST.md 관문 2 행 비고에 적는다. 사전 점검이나 4항목 중 하나라도 실패하면 고치고 다시 돈다. 모두 통과하면 CONTEST.md 3단계와 관문 2 완료, 다음: `/contest:spec`.
 
 ## 사용자에게 보고(라운드마다 3줄, 끝에 요약)
 - 이번 라운드에서 바뀐 결정 1~2개와 이유 한 문장.

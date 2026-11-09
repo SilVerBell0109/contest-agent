@@ -157,4 +157,7 @@ hits=$( for f in skills/status/SKILL.md skills/research/SKILL.md; do grep -qF --
 if [ -z "$hits" ]; then echo "ok   stage 1 allows the user's 【 】 and status/research scan the same files"; else echo "FAIL stage 1 can never pass (users.md must keep 【 】):"; echo "$hits"; fail=1; fi
 u1=$(mktemp -d); printf '# 사용자\n- 팀원 경험: 【 】\n- 월 10명 [가정]\n' > "$u1/users.md"; expect 1 scanp "$u1/users.md" --allow 가정,예시값,확인; expect 0 scanp "$u1/users.md" --allow 가정,예시값,확인,자리표시; rm -rf "$u1"
 if grep -qF '사용자 담당 ❌만 남으면 그 목록(위치 포함)을 보고하고 멈춘다' skills/make/SKILL.md && ! grep -qF '❌가 있으면 1로 돌아간다' skills/make/SKILL.md; then echo "ok   make stops on user-owned ❌ instead of looping"; else echo "FAIL make would loop forever on ❌ only the user can fix (【 】, 서명)"; fail=1; fi
+g2=$(awk '/^## 관문 2 —/{f=1;print;next} /^## /{f=0} f' skills/refine/SKILL.md)
+hits=$(for w in '문제 크기' '여기서만 되는 기능' '범위 경계' '성공 기준 표' 'process.md' 'CONTEST.md 관문 2 행 비고'; do printf '%s\n' "$g2" | grep -qF -- "$w" || echo "  관문 2 lacks: $w"; done)
+if [ -z "$hits" ]; then echo "ok   refine 관문 2 checks the four process.md §2 items"; else echo "FAIL refine 관문 2 differs from references/process.md §2 and CONTEST.md:"; echo "$hits"; fail=1; fi
 [ $fail -eq 0 ] && echo "ALL OK" || { echo "SOME FAILED"; exit 1; }

@@ -156,3 +156,11 @@
 - Final: fixed critic-2 (make 검수가 사용자 몫 ❌에서 무한 반복) — make L23 담당별 분기, run.sh "make stops on user-owned ❌ instead of looping" RED→GREEN, suite 92/92
 - Final: fixed publish-1·critic-7 (설치 사용자의 플러그인 references·templates·데이터 폴더 읽기가 무인 실행에서 거부되고 대화형은 매번 승인 창) — README 권한 문단과 `permissions.allow` 두 규칙, run.sh README lint에 두 규칙 추가 RED→GREEN, suite 92/92
 - Final: Ruling: references/verify-checklist.md L9의 `--against … PRD SRS` 전체 목록은 고치지 않음 — references 내용 금지 규칙(형식 오류만 수정)이고 실제 실행 지시는 skills/verify·agents/fact-checker가 대상별로 줄인다 — 비용: 체크리스트만 보고 직접 실행하면 PRD↔SRS가 서로를 근거로 삼아 미추적 숫자를 놓칠 수 있다
+
+## 소유자 위임 후속 (2026-11-10)
+소유자 지시 "너의 추천대로 나머지 진행해줘". 지난 보고에서 추천한 항목만 처리한다. 수정마다 테스트 RED→GREEN, 전체 스위트, 커밋 1개.
+- Ruling: "나머지"의 범위 = 추천 항목(W15·W22·W23·W24, 상대 `scripts/` 경로 PS-24·PS-25·critic-4, critic-7 후반, 옛 말투 가이드 경로 문서, 0.1.1 배포, 맥북 사용자 범위 설치·말투 가이드 복사·허용 규칙 2개) — 보류 15건과 맥미니 설치는 추천에 없었다 — 비용: 소유자가 전부를 뜻했다면 15건이 한 세션 더 밀린다.
+- Ruling: 위임은 추천한 항목에 한해 references·templates 내용 금지를 푼다 — CLAUDE_CODE_PROMPT 금지는 소유자가 정한 규칙이고 이번 지시가 그 소유자에게서 왔다. 추천 밖 내용은 여전히 형식 오류만 고친다 — 비용: 소유자가 추천 범위도 원문 유지를 원했다면 W22·W23·W24 문구를 되돌려야 한다.
+- Ruling: DC-09(materials/research.md:342-354 claude.ai 대화 링크 13개)는 비공개인 동안 그대로 둔다 — 링크는 로그인한 소유자만 열리고 저장소가 비공개다. 공개 전환 전 점검 목록에 남긴다 — 비용: 저장소를 공개로 돌리면서 이 줄을 놓치면 대화 주소가 노출된다.
+- Ruling: DC-18(플레이북 "1,091줄")은 고치지 않음 — 파일은 줄바꿈으로 끝나는 1090줄이고 편집기는 1,091줄로 보인다. materials/는 보호 대상이고 playbook.md는 gitignore — 비용: `wc -l`로 세는 사람에게 1 차이가 보인다.
+- 진행: W15 refine 관문 2가 process.md §2 4항목(문제 크기·여기서만 되는 기능 둘·범위 경계·성공 기준 표)을 보도록 고침. 기존 4개(숫자 추적·자리표시·예상 질문 절 번호·심사 기준 대응)는 '관문 2 전 사전 점검'으로 옮기고 명령은 그대로. run.sh "refine 관문 2 checks the four process.md §2 items" RED→GREEN, suite 93/93.
