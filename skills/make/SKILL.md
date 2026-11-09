@@ -17,7 +17,7 @@ allowed-tools: Bash(python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/count_chars.py *)
 ## 공통 파이프라인
 서브에이전트는 대화 맥락을 모른다. 부를 때마다 프롬프트에 작업 공간 절대 경로, 대상 파일 절대 경로, 종류·옵션을 넣는다.
 1. **초안**: 템플릿(`${CLAUDE_SKILL_DIR}/../../templates/<해당>.md`)을 PRD·SRS·evidence 내용으로 채운다. 템플릿의 `{{NAME}}`은 작업 공간 폴더 이름(scaffold가 CONTEST.md에 넣은 이름)으로 바꾼다. 숫자는 E-ID가 있는 것만, 사용자 경험·팀원 정보·지원 동기는 `【 】`, 가정은 `[가정]`, 예시값은 `[예시값]`. 파일명에 버전(`v1`), 머리에 변경 로그와 제출 전 지울 메모.
-   - 종류별 담당: 슬라이드·발표대본 → **contest:deck-builder**, 화면예시 → **contest:ui-designer**, mvp·project → **contest:mvp-builder**, 나머지 문서는 메인 에이전트가 직접 쓴다.
+   - 종류별 담당: 슬라이드 → 메인 에이전트가 outline을 쓰고 2~4를 통과한 뒤 **contest:deck-builder**(아래 `슬라이드`), 발표대본 → **contest:deck-builder**, 화면예시 → **contest:ui-designer**, mvp·project → **contest:mvp-builder**, 나머지 문서는 메인 에이전트가 직접 쓴다.
 2. **사실 검증**: **contest:fact-checker** 호출. 응답 전문을 `90-verify/factcheck-<파일명>-<날짜>.md`에 저장한다. '차단' 0이 될 때까지 고친다(고치는 쪽은 초안 작성자).
 3. **문체**(`form`·코드 제외): `--no-humanize`가 아니고 im-not-ai가 설치돼 있으면(Skill 도구 목록에 `humanize-korean:humanize-scan`이 있으면) Skill 도구로 `humanize-korean:humanize-scan`에 대상 파일을 넘겨 전체 패스가 필요한지 본다. 필요하면 파일 본문을 Read로 읽어 `humanize-korean:humanize-korean`에 넘기고, 결과는 스킬이 알려 준 경로(보통 `_workspace/<실행 폴더>/final.md`)에서 읽는다. 끝의 HUMANIZE-SUMMARY 블록을 뺀 본문을 원본과 대조해(의미·수치·고유명사·직접 인용 불변, 변경률 30% 경고·50% 중단) 통과하면 다음 버전으로 저장한다. 작업 공간 루트에 `_workspace/`가 생겼으면 `90-verify/humanize/`로 옮긴다. 설치돼 있지 않으면 건너뛴다. 그다음 **contest:style-editor** 호출(check_style S1 0건, 전/후 표).
 4. **검수**: `/contest:verify <파일>` 절차 실행(자리표시 `--plain`은 제출용 txt에, 글자 수, 숫자 추적, 요강 대조). ❌가 있으면 1로 돌아간다.
@@ -27,7 +27,7 @@ allowed-tools: Bash(python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/count_chars.py *)
 ## 종류별 요점(상세는 deliverables.md)
 - `기획서`: 양식 없으면 proposal-generic 14절. AI 활용 고지 문단 필수. 기대효과 절제. 출처는 각주 번호 + 부록.
 - `지원서`: 문항 → 평가 축 매핑표 먼저 보여 주고 승인 뒤 초안. 지원 동기는 사용자가 직접(【 】). 글자 수는 `python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/count_chars.py <파일> --limit <N>`(이 형태 그대로, 따옴표 없이, 다른 명령과 `;`·`&&`로 잇지 말고 단독으로 — 허용 규칙과 같아야 승인 없이 실행된다)로 센다.
-- `슬라이드`: outline(slides-12) 먼저 → 사용자 확인 → contest:deck-builder. 발표자 노트 구어체.
+- `슬라이드`: `50-deliverables/슬라이드/outline.md`(slides-12) 작성 → 공통 파이프라인 2(사실 검증)·3(문체)·4(검수)를 outline.md에 실행 → 사용자 확인 → contest:deck-builder(프롬프트에 outline.md 절대 경로). pptx는 스크립트가 글자를 읽지 못하므로 2~4를 pptx에 다시 돌리지 않고, 장별 헤드라인·숫자가 outline과 같은지만 대조한다. 발표자 노트 구어체.
 - `보충자료`: 한 장에 한 증명. 첨부 수·용량·파일명 규칙.
 - `화면예시`: 실제 UI 조사 → HTML/CSS 렌더 → AI 티 제거 → 화면마다 기획서 항목 번호 → PDF.
 - `mvp-plan`: 기능×통과 기준, 한 줄기, 일정+버퍼, 하네스, 데모 방식. **관문 4: 사용자 승인 전 코드 금지.** 사용자가 승인하면 머리에 `승인: <날짜> "<사용자 문구>"` 한 줄을 적는다(spec과 같은 형식).

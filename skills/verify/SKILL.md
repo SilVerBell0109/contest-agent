@@ -12,6 +12,8 @@ allowed-tools: Bash(python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/scan_placeholders.p
 ## 대상
 `$ARGUMENTS`의 파일. 없으면 `50-deliverables/` 아래 최신 버전 파일 전부와 CONTEST.md 산출물 표의 미검수 항목.
 
+`.pptx`·`.pdf`·`.docx`·`.hwp`는 스크립트와 사실 검증이 글자를 읽지 못한다. 1~6은 텍스트 원본(슬라이드는 같은 폴더의 `outline.md`, 그 밖에는 같은 버전의 md 원본, 없으면 텍스트로 내보낸 파일)에 돌리고, 바이너리 파일 자체는 7~11(형식·용량·파일명·첨부 등)에서 본다. 텍스트 원본이 없으면 그 파일의 1~6은 ❌(원본 필요)로 적는다.
+
 ## 절차(순서대로, 결과를 표로 모은다)
 1. `python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/scan_placeholders.py <파일>` — 제출용 txt는 `--plain`(마크다운 잔재까지). 허용 태그 없음. 0건이어야 ✅.
 2. `python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/check_style.py <파일> --genre <장르>` — S1 0건 ✅. `--strict`면 S2 ≥3도 ❌. 코드·양식 항목명은 제외.

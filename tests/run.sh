@@ -147,4 +147,8 @@ hits=$(for w in 'gh auth setup-git' 'CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1' 'claude 
 if [ -z "$hits" ]; then echo "ok   README covers private install, updates, external licenses, local-only playbook"; else echo "FAIL README:"; echo "$hits"; fail=1; fi
 hits=$(for f in agents/fact-checker.md skills/verify/SKILL.md; do grep -qF '`40-spec/PRD.md`면 `--against 30-refine/evidence.md`만' "$f" && grep -qF '`40-spec/SRS.md`면 `--against 30-refine/evidence.md 40-spec/PRD.md`' "$f" || echo "  $f"; done)
 if [ -z "$hits" ]; then echo "ok   PRD and SRS are not traced against each other"; else echo "FAIL PRD and SRS would trace their numbers through each other:"; echo "$hits"; fail=1; fi
+hits=$( { grep -qF '슬라이드·발표대본 → **contest:deck-builder**' skills/make/SKILL.md && echo "  skills/make: step 1 hands slides to deck-builder before 2~4"
+  grep -E '^- `슬라이드`' skills/make/SKILL.md | grep -qF '2(사실 검증)·3(문체)·4(검수)를 outline.md에 실행' || echo "  skills/make: slides reach deck-builder unchecked"
+  grep -qF '`.pptx`' skills/verify/SKILL.md || echo "  skills/verify: runs the text scripts on .pptx"; } )
+if [ -z "$hits" ]; then echo "ok   slides are checked as outline.md before deck-builder; verify skips binaries"; else echo "FAIL slide checks would run on a .pptx:"; echo "$hits"; fail=1; fi
 [ $fail -eq 0 ] && echo "ALL OK" || { echo "SOME FAILED"; exit 1; }
