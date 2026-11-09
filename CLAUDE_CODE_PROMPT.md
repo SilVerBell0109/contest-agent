@@ -63,7 +63,7 @@
 - 통과 기준: 경고 2종 출력, exit 0.
 
 ### 8. 문체 자산 연결 (있을 때만)
-- `~/Downloads/보고서_말투_가이드.md`가 있으면 `references/style/user-report-tone.md`로 복사할지 묻고, 복사하면 `references/style-ko.md` 머리의 "사용자 자산 우선" 문장이 실제 경로를 가리키는지 확인.
+- `~/Downloads/보고서_말투_가이드.md`가 있으면 `${CLAUDE_PLUGIN_DATA}/style/user-report-tone.md`(`~/.claude/plugins/data/contest-contest-agent/style/`)로 복사할지 묻고, 복사하면 `references/style-ko.md` 머리의 "사용자 자산 우선" 문장이 실제 경로를 가리키는지 확인.
 - `korean-report-tone` 스킬이 설치돼 있으면 `skills/make/SKILL.md` 문체 단계에 호출 한 줄 추가를 제안(승인 뒤).
 
 ### 9. 저장소 준비

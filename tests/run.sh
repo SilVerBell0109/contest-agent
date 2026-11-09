@@ -183,4 +183,6 @@ hits=$( grep -rnE '(^|[^/}A-Za-z_-])scripts/[a-z_]+\.py' references templates
 if [ -z "$hits" ]; then echo "ok   references and templates name scripts by plugin path; workspace rules name real files"; else echo "FAIL relative scripts/ paths resolve against the workspace, or the workspace CLAUDE.md names a plan.md it never has:"; echo "$hits"; fail=1; fi
 hits=$( for w in '읽기 거부' 'Read(~/.claude/plugins/data/contest-contest-agent/**)' '말투 가이드: 적용/없음/읽기 거부'; do grep -qF -- "$w" agents/style-editor.md || echo "  style-editor lacks: $w"; done )
 if [ -z "$hits" ]; then echo "ok   style-editor reports a refused tone-guide read instead of treating it as absent"; else echo "FAIL style-editor treats a refused read of the tone guide as no guide:"; echo "$hits"; fail=1; fi
+hits=$(grep -rn 'references/style/' --include='*.md' . | grep -v '^\./docs/assembly/')
+if [ -z "$hits" ]; then echo "ok   no doc sends the tone guide to references/style/ (it lives in the plugin data folder)"; else echo "FAIL docs still copy the tone guide into references/style/:"; echo "$hits"; fail=1; fi
 [ $fail -eq 0 ] && echo "ALL OK" || { echo "SOME FAILED"; exit 1; }

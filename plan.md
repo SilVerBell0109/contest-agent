@@ -49,7 +49,7 @@
 |---|---|---|
 | **im-not-ai** (`/humanize-scan`, `/humanize`, `/humanize-korean`, MIT) | `/contest:make` 산출물의 문체 단계. 의미·수치·고유명사 불변, 변경률 30% 경고·50% 중단을 그대로 따름. 장르는 지원서 본문=합쇼체·1인칭, 양식 개조식=유지 | references/style-ko.md의 B-7 규칙 + scripts/check_style.py |
 | **impeccable** (`/impeccable init·shape·critique·audit·polish·harden·adapt·onboard`, Apache-2.0) | `make mvp`·`make project`·`make 화면예시`의 UI 단계. PRODUCT.md는 PRD에서 채움 | references/mvp-dev.md의 anti-slop 규칙 |
-| 사용자 기존 자산 | `~/Downloads/보고서_말투_가이드.md`, korean-report-tone 스킬 → references/style/user-report-tone.md로 복사 | B-7 요약으로 대체 |
+| 사용자 기존 자산 | `~/Downloads/보고서_말투_가이드.md`, korean-report-tone 스킬 → `${CLAUDE_PLUGIN_DATA}/style/user-report-tone.md`로 복사 | B-7 요약으로 대체 |
 
 ## 6. 파일 트리
 
@@ -75,7 +75,7 @@ contest-agent/
 - [ ] 4. `claude plugin validate .` 통과
 - [ ] 5. scripts/ 단위 테스트(샘플 입력으로 자리표시·금칙어·글자 수·숫자 추적 결과 확인)
 - [ ] 6. 외부 플러그인 설치 확인: `/plugin marketplace add pbakaus/impeccable`, `/plugin marketplace add epoko77-ai/im-not-ai` → `/plugin install humanize-korean@im-not-ai`. 미설치 시 폴백 문서가 안내되는지 확인
-- [ ] 7. 사용자 자산 복사: `~/Downloads/보고서_말투_가이드.md` → references/style/user-report-tone.md (있을 때)
+- [ ] 7. 사용자 자산 복사: `~/Downloads/보고서_말투_가이드.md` → `${CLAUDE_PLUGIN_DATA}/style/user-report-tone.md` (있을 때)
 - [ ] 8. 드라이런: `claude --plugin-dir .` 로 `/contest:init demo --type dev` → 샘플 요강으로 `/contest:research` → `/contest:topics` 까지 돌려 산출물 형식 확인
 - [ ] 9. README.md(설치·사용·규칙), LICENSE, marketplace.json 확정
 - [ ] 10. git init → 첫 커밋. 원격 푸시는 사용자가 수행
