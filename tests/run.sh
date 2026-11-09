@@ -14,6 +14,11 @@ expect 1 scanp "$sp/box.md" --plain
 printf '값: [ ]\n[ ]\n배열 []\n' > "$sp/empty.md";                             expect 1 scanp "$sp/empty.md"
 out=$(scanp "$sp/empty.md" 2>&1)
 if echo "$out" | grep -q '합계 3건'; then echo "ok   scan_placeholders flags all 3 empty brackets"; else echo "FAIL scan_placeholders missed an empty bracket"; fail=1; fi
+printf 'TBD입니다\nTODO로 남김\nXXX님께 보냄\n' > "$sp/tbd.md"
+if scanp "$sp/tbd.md" 2>&1 | grep -q '합계 3건'; then echo "ok   scan_placeholders flags TODO/TBD/XXX before a Korean particle"; else echo "FAIL scan_placeholders missed TODO/TBD/XXX before a Korean particle"; fail=1; fi
+printf '실행은 `main()`으로 합니다.\n\n```json\n{"args": [], "run": "start()"}\n```\n\nloadConfig() 뒤에 시작합니다.\n' > "$sp/code.md"; expect 0 scanp "$sp/code.md"
+printf '이름( )\n연락처 ()\n' > "$sp/paren.md"
+if scanp "$sp/paren.md" 2>&1 | grep -q '합계 2건'; then echo "ok   scan_placeholders still flags empty ( ) in prose"; else echo "FAIL scan_placeholders missed an empty ( ) in prose"; fail=1; fi
 expect 2 scanp "$T/clean-body.txt" "$sp/none.md"
 expect 2 scanp "$T/clean-body.txt" --allow
 rm -rf "$sp"

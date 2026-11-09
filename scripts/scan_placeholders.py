@@ -20,10 +20,12 @@ PATTERNS = {
     "[예시값]": re.compile(r"\[\s*예시값?\s*\]"),
     "[작성 예정]/[확정 필요]": re.compile(r"\[\s*(작성\s*예정|확정\s*필요|기입\s*필요|링크\s*추가\s*예정)\s*\]"),
     "(기입 필요)": re.compile(r"\(\s*(기입\s*필요|이력\s*보완\s*요망|제\s*추측입니다\s*—\s*삭제)\s*\)"),
-    "TODO/TBD/FIXME": re.compile(r"\b(TODO|TBD|FIXME|XXX)\b"),
+    # \b는 한글도 단어 문자로 봐서 'TBD입니다'를 놓친다. 영문·숫자·밑줄만 경계로 본다.
+    "TODO/TBD/FIXME": re.compile(r"(?<![A-Za-z0-9_])(TODO|TBD|FIXME|XXX)(?![A-Za-z0-9_])"),
     "메타 지시문": re.compile(r"\((사용자\s*원칙|메모|이\s*줄은\s*지울\s*것)[^)]*\)|…?\.png를\s*삽입|배점에\s*유리|제출\s*전에\s*(이\s*메모|지운다|지워)"),
     # 목록 체크박스(- [ ], 1. [ ])는 빈 값이 아니다. --plain에서는 PLAIN_ONLY가 잡는다.
-    "빈 괄호 값": re.compile(r"(?<![-*+]\s)(?<!\d[.)]\s)\[\s*\]|\(\s*\)|○○|◯◯|xxx|N건|N명|N%"),
+    # 함수 호출 main()은 빼고, 코드 블록·`코드` 안은 CODE_BLIND로 건너뛴다.
+    "빈 괄호 값": re.compile(r"(?<![-*+]\s)(?<!\d[.)]\s)\[\s*\]|(?<![A-Za-z0-9_])\(\s*\)|○○|◯◯|xxx|N건|N명|N%"),
     "양식 안내문 잔재": re.compile(r"✅\s*(무엇을|기존|관련|시간|접근|결과물)|파란\s*안내문"),
 }
 PLAIN_ONLY = {
@@ -33,10 +35,19 @@ PLAIN_ONLY = {
     "취소선 변환 위험(~)": re.compile(r"~[^~\n]+~"),
     "마크다운 체크박스(- [ ])": re.compile(r"^\s*(?:[-*+]|\d+[.)])\s+\[[ xX]?\]", re.M),
 }
+# 코드 예시(README·매뉴얼의 main(), "args": [])를 빈 값으로 보지 않을 규칙
+CODE_BLIND = {"빈 괄호 값"}
+CODE_RX = re.compile(r"^ {0,3}(```|~~~).*?^ {0,3}\1[^\n]*$|`[^`\n]+`", re.M | re.S)
+
+
+def mask_code(text: str) -> str:
+    """코드 블록과 `코드`를 같은 길이의 공백으로 바꿔 줄 번호·위치를 유지한다."""
+    return CODE_RX.sub(lambda m: re.sub(r"[^\n]", " ", m.group(0)), text)
 
 
 def scan(path: Path, allow: set, plain: bool):
     text = path.read_text(encoding="utf-8", errors="replace")
+    masked = mask_code(text)
     hits = []
     pats = dict(PATTERNS)
     if plain:
@@ -44,7 +55,7 @@ def scan(path: Path, allow: set, plain: bool):
     for label, rx in pats.items():
         if any(a in label for a in allow):
             continue
-        for m in rx.finditer(text):
+        for m in rx.finditer(masked if label in CODE_BLIND else text):
             line_no = text.count("\n", 0, m.start()) + 1
             snippet = text[max(0, m.start() - 20): m.end() + 20].replace("\n", " ")
             hits.append((line_no, label, snippet.strip()))
