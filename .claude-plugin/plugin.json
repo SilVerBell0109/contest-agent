@@ -1,7 +1,7 @@
 {
   "name": "contest",
   "description": "소프트웨어 공모전 원스톱 에이전트 — 공모전 조사 → 주제 추천 → 고도화 → PRD·SRS → 기획서·슬라이드·MVP·발표자료 생성. 근거 원장(evidence.md)과 PRD·SRS를 단일 진실 원천으로 삼아 할루시네이션을 막는다.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": {
     "name": "최종은 (SilVerBell0109)"
   },
