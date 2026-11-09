@@ -30,6 +30,19 @@ expect 2 python3 -I $S/check_style.py $T/clean-body.txt --genre
 expect 2 python3 -I $S/check_style.py $T/no-such-file.md
 expect 1 python3 -I $S/count_chars.py $T/clean-body.txt --limit 100
 expect 0 python3 -I $S/count_chars.py $T/clean-body.txt --limit 5000
+cntc() { python3 -I $S/count_chars.py "$@"; }
+expect 0 cntc $T/clean-body.txt --limit 5,000
+expect 0 cntc $T/clean-body.txt --limit '5,000자 이내'
+expect 2 cntc $T/clean-body.txt --limit 1만자
+expect 2 cntc $T/clean-body.txt --limit
+expect 2 cntc $T/clean-body.txt --limt 5000
+expect 2 cntc --limit 5000 $T/clean-body.txt
+expect 2 cntc $T/no-such-file.txt --limit 5000
+cm=$(mktemp -d); printf '머리말\n[본문]\n가나다\n[끝]\n꼬리말이 아주 깁니다\n' > "$cm/m.txt"
+if cntc "$cm/m.txt" --start '[본문]' --end '[끝]' | grep -q '공백 포함 *: 3자'; then echo "ok   count_chars counts only between the markers"; else echo "FAIL count_chars counted outside the markers"; fail=1; fi
+expect 2 cntc "$cm/m.txt" --start '[없는 표식]'
+expect 2 cntc "$cm/m.txt" --start '[본문]' --end '[없는 끝]'
+rm -rf "$cm"
 expect 1 python3 -I $S/trace_numbers.py $T/numbers.md --against $T/evidence.md
 expect 0 python3 -I $S/trace_numbers.py $T/numbers.md --against $T/evidence.md --warn
 tn=$(mktemp -d); tnum() { python3 -I $S/trace_numbers.py "$@"; }
