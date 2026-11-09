@@ -15,6 +15,19 @@
 
 업데이트: 이 마켓플레이스는 자동 업데이트가 기본으로 꺼져 있습니다. `/plugin marketplace update contest-agent` 또는 `claude plugin update contest@contest-agent`로 받습니다. 새 버전은 `plugin.json`의 `version`이 올라가야 설치됩니다.
 
+권한: 스킬과 에이전트는 설치된 플러그인 폴더의 `references/`·`templates/`와 플러그인 데이터 폴더(말투 가이드)를 읽습니다. 이 경로는 작업 폴더 밖이라 대화형 모드에서는 읽을 때마다 승인 창이 뜨고(백그라운드 에이전트의 승인 창도 메인 세션에 뜹니다), `claude -p`·dontAsk 같은 무인 실행에서는 읽기가 거부되어 규칙 없이 진행됩니다. `~/.claude/settings.json`의 `permissions.allow`에 아래 두 항목을 넣으면 묻지 않고 읽습니다(이미 `allow` 배열이 있으면 두 항목만 더합니다).
+
+```json
+{
+  "permissions": {
+    "allow": [
+      "Read(~/.claude/plugins/cache/contest-agent/**)",
+      "Read(~/.claude/plugins/data/contest-contest-agent/**)"
+    ]
+  }
+}
+```
+
 권장 외부 플러그인(없어도 동작, 있으면 품질이 오릅니다):
 
 ```
