@@ -51,16 +51,29 @@ rm -rf "$cm"
 expect 1 python3 -I $S/trace_numbers.py $T/numbers.md --against $T/evidence.md
 expect 0 python3 -I $S/trace_numbers.py $T/numbers.md --against $T/evidence.md --warn
 tn=$(mktemp -d); tnum() { python3 -I $S/trace_numbers.py "$@"; }
-printf '| E037 | 참가 인원 | 미정 | 출처 | 2026-11-05 | 2026-11-05 | ✅ |\n' > "$tn/ev.md"
+printf '| E120 | 참가 인원 | 미정 | 출처 | 2026-11-05 | 2026-11-05 | ✅ |\n' > "$tn/ev.md"
 printf '| E001 | 모집 | 300명 | 출처 | 2026-10-01 | 2026-11-05 | ✅ |\n' > "$tn/ev2.md"
 t() { printf '%s\n' "$2" > "$tn/$1.md"; }
-t eid '참가 인원은 37명입니다.';            expect 1 tnum "$tn/eid.md" --against "$tn/ev.md"
+t eid '참가 인원은 120명입니다.';           expect 1 tnum "$tn/eid.md" --against "$tn/ev.md"
 t date '모집은 11명입니다.';                expect 1 tnum "$tn/date.md" --against "$tn/ev.md"
 t comma '참가자는 2,000명입니다.';          expect 1 tnum "$tn/comma.md" --against "$tn/ev.md"
 t unit '예산은 2025억 원입니다.';           expect 1 tnum "$tn/unit.md" --against "$tn/ev.md"
 t hangul '공시는 총525건입니다.';           expect 1 tnum "$tn/hangul.md" --against "$tn/ev.md"
 t dotted '2026.11.09 기준으로 정리했습니다.'; expect 0 tnum "$tn/dotted.md" --against "$tn/ev.md"
 t kdate '2026년 10월 1일 300명 모집, 제12회 대회.'; expect 0 tnum "$tn/kdate.md" --against "$tn/ev2.md"
+tgrep() { local want=$1 msg=$2; shift 2; if tnum "$@" 2>&1 | grep -q "미추적 ${want}개"; then echo "ok   trace_numbers $msg"; else echo "FAIL trace_numbers $msg (want 미추적 ${want}개)"; fail=1; fi; }
+printf '근거는 E120에 있습니다.\n발표는 11월 5일입니다.\n기사: https://news.example.com/2025/11/25/a\n' > "$tn/ev3.md"
+t eidp '참가 인원은 120명이고 5명이 발표하며 25명을 뽑습니다.'
+tgrep 3 "ignores E120에, 11월 5일 and URL digits in --against" "$tn/eidp.md" --against "$tn/ev3.md"
+cp templates/PRD.md templates/SRS.md "$tn/"
+t spec '처리 시간이 10% 줄고 12명이 평균 4.2점을 줬습니다.'
+tgrep 3 "ignores PRD/SRS structure numbers (headings, §, IDs, versions, paths)" "$tn/spec.md" --against "$tn/ev.md" "$tn/PRD.md" "$tn/SRS.md"
+t units '시장 규모는 12조 원, 매장은 35곳, 대상은 40가구입니다.'; tgrep 3 "extracts 조·곳·가구" "$tn/units.md" --against "$tn/ev.md"
+t signs '전년 대비 -15%, 목표는 20-30%입니다.';                tgrep 2 "extracts -15% and the top of 20-30%" "$tn/signs.md" --against "$tn/ev.md"
+t jeom '경제 100조 원 규모이고 실제 3회 시연했습니다.';          tgrep 2 "keeps numbers after 경제/실제 (제N회 only as a word)" "$tn/jeom.md" --against "$tn/ev.md"
+t age '20대·30대 직장인과 1인 가구가 주 사용자입니다.';          expect 0 tnum "$tn/age.md" --against "$tn/ev.md"
+expect 1 tnum "$tn/dotted.md" "$tn/eid.md" --against "$tn/ev.md"
+expect 2 tnum "$tn/eid.md" "$tn/none.md" --against "$tn/ev.md"
 expect 1 tnum "$tn/eid.md" --against "$tn/eid.md"
 out=$(tnum "$tn/eid.md" --against "$tn/ev.md" "$tn/none.md" 2>&1)
 if echo "$out" | grep -q "대조 파일 없음"; then echo "ok   trace_numbers warns on a missing --against file"; else echo "FAIL trace_numbers silent on a missing --against file"; fail=1; fi
