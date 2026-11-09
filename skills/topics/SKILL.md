@@ -2,6 +2,7 @@
 name: topics
 description: 공모전 2단계 주제 추천. 조사 결과로 후보 3~5개 카드와 수상 관문 비교표를 만들고 단독 추천 + 이유를 제시한 뒤 사용자 선택(관문 1)을 기다린다.
 argument-hint: "[분야 또는 사용자가 생각한 후보…] [--pick N]"
+allowed-tools: Bash(python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/trace_numbers.py *)
 ---
 
 # /contest:topics — 2단계 주제 추천 (관문 1)
@@ -9,14 +10,14 @@ argument-hint: "[분야 또는 사용자가 생각한 후보…] [--pick N]"
 기준은 사용자가 정했다: 수상 최우선 → 취업 목표(금융권 백엔드) 연결 → 겹치지 않음 → 기간 내 구현 가능. `${CLAUDE_SKILL_DIR}/../../references/user-criteria.md`와 `topic-selection.md`를 먼저 읽는다.
 
 ## 사전 확인
-- `10-research/brief.md`·`org.md`가 없으면 `/contest:research`를 먼저 안내하고 멈춘다(근거 없는 후보는 만들지 않는다).
+- `10-research/brief.md`·`org.md`가 없거나 빈 템플릿 그대로면(`/contest:status` 1단계 기준) `/contest:research`를 먼저 안내하고 멈춘다(근거 없는 후보는 만들지 않는다).
 - `$ARGUMENTS`에 사용자가 적은 후보나 분야가 있으면 그것을 1번 후보·우선 분야로 둔다. 사용자 안을 기각하지 않는다 — 비교표에 같은 기준으로 올린다.
 
 ## 절차
 1. **분야 선택**(사용자가 "분야는 어디가 좋을까?"를 물었거나 공모 주제가 여러 분야일 때): 기준 4개(심사 기준 배점, 주최사 빈틈, 데이터 접근성, 사용자 강점)로 분야 2~3개를 표로 비교하고 하나를 권한다. 사용자가 고르면 그 분야로 좁힌다.
 2. **topic-strategist** 서브에이전트 호출 → `20-topics/topics.md`(후보 카드 11항목 × 3~5, 수상 관문 비교표, 폐기 후보와 이유, 단독 추천 + 수상 확률을 올리는 조건 4~6개). 프롬프트에 작업 공간·references·템플릿 절대 경로와 사용자 기준 요약을 넣는다.
 3. **중복 점검** 보강: 추천 후보에 대해 domain-researcher를 한 번 더 불러 "이미 출시된 서비스 / 다른 참가자" 두 축으로 확인하고 결과를 카드에 반영한다(사용자 질문 "이거 겹치지 않을 주제일까?"에 대한 답이 미리 있어야 한다).
-4. 메인 에이전트 점검: 카드의 숫자마다 E-ID가 있는가(`trace_numbers.py 20-topics/topics.md --against 30-refine/evidence.md --warn`), 폐기 이유가 구체적인가, 추천 이유가 "관문" 형식인가.
+4. 메인 에이전트 점검: 카드의 숫자마다 E-ID가 있는가(`python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/trace_numbers.py 20-topics/topics.md --against 30-refine/evidence.md --warn`(이 형태 그대로, 따옴표 없이, 다른 명령과 `;`·`&&`로 잇지 말고 단독으로 — 허용 규칙과 같아야 승인 없이 실행된다)), 폐기 이유가 구체적인가, 추천 이유가 "관문" 형식인가.
 5. **관문 1 — 사용자 선택**. 사용자에게 보여 주는 형식:
    - 후보를 번호로, 각 한 줄 정의 + 관문에서 가장 유리한 점 + 가장 불리한 점.
    - "추천: N번. 이유: 아이디어가 더 좋아서가 아니라 ○○ 관문에서 실패 확률이 낮아서."

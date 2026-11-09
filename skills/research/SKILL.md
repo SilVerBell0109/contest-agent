@@ -2,6 +2,7 @@
 name: research
 description: 공모전 1단계 조사. 요강 전수 추출(brief.md) → 주최사(org.md) → 분야·경쟁(domain.md, competitors.md) → 사용자(users.md)를 서브에이전트로 조사하고 모든 사실을 evidence.md에 E-ID로 등록한다.
 argument-hint: "[요강 URL 또는 00-inputs 파일 경로…] [--only brief|org|domain|users|competitors]"
+allowed-tools: Bash(python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/scan_placeholders.py *)
 ---
 
 # /contest:research — 1단계 조사
@@ -24,9 +25,9 @@ argument-hint: "[요강 URL 또는 00-inputs 파일 경로…] [--only brief|org
 6. **통합 점검**(메인 에이전트가 직접):
    - evidence.md의 E-ID 번호 중복·누락, ✅/⚠️/❓ 개수.
    - 네 문서가 서로 어긋나는 사실(예: 주최사 인원 수가 org와 domain에서 다름)을 찾아 evidence에 "상충" 표기.
-   - 기한·분량·금지사항을 CONTEST.md 일정표·제약 칸에 옮긴다.
-   - `python3 -I "${CLAUDE_SKILL_DIR}/../../scripts/scan_placeholders.py" 10-research/*.md --allow 가정,예시값,확인`로 추측 채움이 없는지 확인.
-7. CONTEST.md "단계와 관문" 표에서 1단계를 완료로 바꾸고 날짜를 적는다.
+   - 기한·분량을 CONTEST.md 기본 정보 표(공식 마감·실질 마감·제출물 행)에 옮긴다. 세부는 brief.md §2(분량·형식)·§7(금지 사항)·§8(일정표)에 둔다.
+   - `python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/scan_placeholders.py 10-research/brief.md 10-research/org.md 10-research/domain.md 10-research/competitors.md 10-research/users.md --allow 가정,예시값,확인`(이 형태 그대로, 따옴표 없이, 다른 명령과 `;`·`&&`로 잇지 말고 단독으로 — 허용 규칙과 같아야 승인 없이 실행된다)로 추측 채움이 없는지 확인.
+7. CONTEST.md "단계와 관문" 표에서 1단계를 완료로 바꾸고 날짜를 적는다. 네 문서가 빈 템플릿 그대로이거나 evidence.md에 채워진 E-ID가 없으면 완료로 바꾸지 않는다(`/contest:status` 1단계 기준과 같다).
 
 ## 사용자에게 보고(짧게, 번호로)
 - 요강에서 가장 위험한 제약 1~2개(글자 수·첨부 수·개인정보 금지·마감 시각).

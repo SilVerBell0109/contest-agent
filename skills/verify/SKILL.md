@@ -2,21 +2,22 @@
 name: verify
 description: 산출물 제출 전 검수. 자리표시·문체·글자 수·숫자 추적 스크립트 → 사실 검증 → 요강 대조 → 90-verify/report. 사용자가 "검수해줘", "제출해도 될까", "체크해줘"라고 할 때 사용.
 argument-hint: "[파일 경로…] [--plain] [--limit N] [--genre body|form|slides] [--strict]"
+allowed-tools: Bash(python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/scan_placeholders.py *), Bash(python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/check_style.py *), Bash(python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/count_chars.py *), Bash(python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/trace_numbers.py *)
 ---
 
 # /contest:verify — 검수
 
-절차는 `${CLAUDE_SKILL_DIR}/../../references/verify-checklist.md`, 항목은 `${CLAUDE_SKILL_DIR}/../../templates/submission-checklist.md`. 스크립트는 `${CLAUDE_SKILL_DIR}/../../scripts/`(모두 `python3 -I`).
+절차는 `${CLAUDE_SKILL_DIR}/../../references/verify-checklist.md`, 항목은 `${CLAUDE_SKILL_DIR}/../../templates/submission-checklist.md`. 스크립트 네 개는 아래 1~4의 명령 그대로 실행한다(이 형태 그대로, 따옴표 없이, 다른 명령과 `;`·`&&`로 잇지 말고 단독으로 — 허용 규칙과 같아야 승인 없이 실행된다).
 
 ## 대상
 `$ARGUMENTS`의 파일. 없으면 `50-deliverables/` 아래 최신 버전 파일 전부와 CONTEST.md 산출물 표의 미검수 항목.
 
 ## 절차(순서대로, 결과를 표로 모은다)
-1. `scan_placeholders.py <파일>` — 제출용 txt는 `--plain`(마크다운 잔재까지). 허용 태그 없음. 0건이어야 ✅.
-2. `check_style.py <파일> --genre <장르>` — S1 0건 ✅. `--strict`면 S2 ≥3도 ❌. 코드·양식 항목명은 제외.
-3. `count_chars.py <파일> --limit N` — brief.md의 글자 수 제한. 줄바꿈 2자(crlf) 기준도 제한 안이어야 ✅.
-4. `trace_numbers.py <파일> --against 30-refine/evidence.md 40-spec/PRD.md 40-spec/SRS.md` — 미추적 0건 ✅. 미추적은 E-ID 등록 또는 [예시값]/[가정] 표기 후 제출 전 해소.
-5. im-not-ai 설치 시 `/humanize-scan <파일>` 결과(AI 패턴 밀도)를 기록.
+1. `python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/scan_placeholders.py <파일>` — 제출용 txt는 `--plain`(마크다운 잔재까지). 허용 태그 없음. 0건이어야 ✅.
+2. `python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/check_style.py <파일> --genre <장르>` — S1 0건 ✅. `--strict`면 S2 ≥3도 ❌. 코드·양식 항목명은 제외.
+3. `python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/count_chars.py <파일> --limit N` — brief.md의 글자 수 제한. 줄바꿈 2자(crlf) 기준도 제한 안이어야 ✅.
+4. `python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/trace_numbers.py <파일> --against 30-refine/evidence.md 40-spec/PRD.md 40-spec/SRS.md` — 미추적 0건 ✅. 미추적은 E-ID 등록 또는 [예시값]/[가정] 표기 후 제출 전 해소.
+5. im-not-ai가 설치돼 있으면(Skill 도구 목록에 `humanize-korean:humanize-scan`이 있으면) Skill 도구로 대상 파일을 스캔해 AI 패턴 밀도를 기록한다. 없으면 보고서에 '미설치'로 적고 넘어간다.
 6. **fact-checker** 호출(수동 전수 대조: 인용 존재, 요약↔본문, 산출물 이름 통일, 경쟁 평가 공정성, 스펙 밖 내용, 사람·경험, 절대 표현).
 7. 요강 대조(brief.md §2·§7): 분량·형식·용량·첨부 수·파일명·메일 제목·CC·기재 금지·필수 포함(AI 고지·라이선스·해시태그).
 8. 일관성(traceability §4): 새 기능이 목표·KPI·유저플로우·일정·역할·예산·기대효과에 모두 있는가. 텍스트판↔그림판 표 일치. 기획서↔슬라이드↔README 이름·수치 일치.
