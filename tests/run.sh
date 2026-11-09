@@ -185,4 +185,17 @@ hits=$( for w in '읽기 거부' 'Read(~/.claude/plugins/data/contest-contest-ag
 if [ -z "$hits" ]; then echo "ok   style-editor reports a refused tone-guide read instead of treating it as absent"; else echo "FAIL style-editor treats a refused read of the tone guide as no guide:"; echo "$hits"; fail=1; fi
 hits=$(grep -rn 'references/style/' --include='*.md' . | grep -v '^\./docs/assembly/')
 if [ -z "$hits" ]; then echo "ok   no doc sends the tone guide to references/style/ (it lives in the plugin data folder)"; else echo "FAIL docs still copy the tone guide into references/style/:"; echo "$hits"; fail=1; fi
+hk=$(mktemp -d); for d in 슬라이드 보충자료 발표대본 기획서; do mkdir -p "$hk/50-deliverables/$d"; done
+printf '❶ 문제 ❷ 해결 ❸ 효과\n' > "$hk/50-deliverables/슬라이드/outline.md"
+printf '| 기능 | 기존 | 제안 |\n|---|---|---|\n| 오프라인 | ✅ | ❌ |\n' > "$hk/50-deliverables/보충자료/compare.md"
+printf '| 장면 | 내레이션(구어체) |\n|---|---|\n| ❶ | 책 보다가 바로 물어봐 |\n' > "$hk/50-deliverables/발표대본/script.md"
+printf '검증 결과 ✅ 통과입니다.\n' > "$hk/50-deliverables/기획서/x.md"
+hookmsg() { echo "{\"tool_input\":{\"file_path\":\"$1\"}}" | bash $S/post_write_check.sh | grep -c '"systemMessage"'; }
+hits=$( for f in 슬라이드/outline.md 보충자료/compare.md 발표대본/script.md; do [ "$(hookmsg "$hk/50-deliverables/$f")" -eq 0 ] || echo "  hook reports 실패 on $f for symbols its genre allows"; done
+  [ "$(hookmsg "$hk/50-deliverables/기획서/x.md")" -eq 1 ] || echo "  hook no longer flags ✅ in a 기획서 body" ); rm -rf "$hk"
+if [ -z "$hits" ]; then echo "ok   hook picks the genre by folder (슬라이드·발표대본·시연대본 slides, 보충자료 form, else body)"; else echo "FAIL hook checks every deliverable as body:"; echo "$hits"; fail=1; fi
+hits=$( grep -qF '`50-deliverables/슬라이드/`·`발표대본/`·`시연대본/` → `slides`, `보충자료/` → `form`, 그 밖 → `body`(저장 훅과 같은 규칙)' skills/verify/SKILL.md || echo "  skills/verify: step 2 has no folder→genre rule"
+  grep -qF '`/contest:verify <파일> --genre <장르>`' skills/make/SKILL.md || echo "  skills/make: step 4 runs verify without a genre"
+  grep -qF '슬라이드 헤드라인·발표자 노트·발표대본·시연대본 → `slides`' agents/style-editor.md || echo "  style-editor: scripts are not mapped to slides" )
+if [ -z "$hits" ]; then echo "ok   verify, make and style-editor pick the genre by the hook's folder rule"; else echo "FAIL verify/make guess the genre the hook and style-editor already fix:"; echo "$hits"; fail=1; fi
 [ $fail -eq 0 ] && echo "ALL OK" || { echo "SOME FAILED"; exit 1; }

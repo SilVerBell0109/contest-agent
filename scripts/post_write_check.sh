@@ -19,9 +19,15 @@ esac
 found=0
 case "$FILE" in
   */50-deliverables/*)
+    # 문체 장르는 폴더로 정한다(verify 2단계·style-editor와 같은 규칙).
+    case "$FILE" in
+      */50-deliverables/슬라이드/*|*/50-deliverables/발표대본/*|*/50-deliverables/시연대본/*) G=slides ;;
+      */50-deliverables/보충자료/*) G=form ;;
+      *) G=body ;;
+    esac
     P="$(python3 -I "$HERE/scan_placeholders.py" "$FILE" --allow 가정,예시값 2>/dev/null)" || found=1
-    S="$(python3 -I "$HERE/check_style.py" "$FILE" --genre body 2>/dev/null)" || found=1
-    MSG="[contest 훅] 산출물 변경 감지: $FILE
+    S="$(python3 -I "$HERE/check_style.py" "$FILE" --genre "$G" 2>/dev/null)" || found=1
+    MSG="[contest 훅] 산출물 변경 감지: $FILE (문체 장르 $G)
 $(printf '%s\n' "$P" | tail -n 6)
 $(printf '%s\n' "$S" | head -n 12)"
     ;;

@@ -16,7 +16,7 @@ allowed-tools: Bash(python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/scan_placeholders.p
 
 ## 절차(순서대로, 결과를 표로 모은다)
 1. `python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/scan_placeholders.py <파일>` — 제출용 txt는 `--plain`(마크다운 잔재까지). 허용 태그 없음. 0건이어야 ✅.
-2. `python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/check_style.py <파일> --genre <장르>` — S1 0건 ✅. `--strict`면 S2 ≥3도 ❌. 코드·양식 항목명은 제외.
+2. `python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/check_style.py <파일> --genre <장르>` — 장르는 인자에 `--genre`가 있으면 그 값, 없으면 대상 폴더로 정한다: `50-deliverables/슬라이드/`·`발표대본/`·`시연대본/` → `slides`, `보충자료/` → `form`, 그 밖 → `body`(저장 훅과 같은 규칙). S1 0건 ✅. `--strict`면 S2 ≥3도 ❌. 코드·양식 항목명은 제외.
 3. `python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/count_chars.py <파일> --limit N` — brief.md의 글자 수 제한. 줄바꿈 2자(crlf) 기준도 제한 안이어야 ✅.
 4. `python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/trace_numbers.py <파일> --against 30-refine/evidence.md 40-spec/PRD.md 40-spec/SRS.md` — 미추적 0건 ✅. PRD·SRS가 서로를 근거로 삼지 않도록 대상이 `40-spec/PRD.md`면 `--against 30-refine/evidence.md`만, `40-spec/SRS.md`면 `--against 30-refine/evidence.md 40-spec/PRD.md`로 줄인다. 미추적은 E-ID 등록 또는 [예시값]/[가정] 표기 후 제출 전 해소.
 5. im-not-ai가 설치돼 있으면(Skill 도구 목록에 `humanize-korean:humanize-scan`이 있으면) Skill 도구로 대상 파일을 스캔해 AI 패턴 밀도를 기록한다. 없으면 보고서에 '미설치'로 적고 넘어간다.
