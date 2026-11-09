@@ -15,7 +15,7 @@ maxTurns: 30
 ## 절차
 1. 스크립트 먼저(경로는 작업 공간 루트 기준):
    - `python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/scan_placeholders.py <파일> [--plain]` — 자리표시·메타 지시문·마크다운 잔재.
-   - `python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/trace_numbers.py <파일> --against 30-refine/evidence.md 40-spec/PRD.md 40-spec/SRS.md` — 숫자 추적.
+   - `python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/trace_numbers.py <파일> --against 30-refine/evidence.md 40-spec/PRD.md 40-spec/SRS.md` — 숫자 추적. PRD·SRS가 서로를 근거로 삼지 않도록 대상이 `40-spec/PRD.md`면 `--against 30-refine/evidence.md`만, `40-spec/SRS.md`면 `--against 30-refine/evidence.md 40-spec/PRD.md`로 줄인다(대상마다 따로 실행).
 2. 수동 전수 대조:
    - 숫자: 값·단위·기준 연도·표본이 E-ID와 같은가. 반올림·"안팎"·"이내" 수위가 evidence 등급(✅/⚠️)에 맞는가.
    - 인용: 따옴표 문장이 원자료에 실제로 있는가(E-ID 확인 방법 참조). 없으면 ❌.

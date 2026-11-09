@@ -16,7 +16,7 @@ allowed-tools: Bash(python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/scan_placeholders.p
 1. `python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/scan_placeholders.py <파일>` — 제출용 txt는 `--plain`(마크다운 잔재까지). 허용 태그 없음. 0건이어야 ✅.
 2. `python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/check_style.py <파일> --genre <장르>` — S1 0건 ✅. `--strict`면 S2 ≥3도 ❌. 코드·양식 항목명은 제외.
 3. `python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/count_chars.py <파일> --limit N` — brief.md의 글자 수 제한. 줄바꿈 2자(crlf) 기준도 제한 안이어야 ✅.
-4. `python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/trace_numbers.py <파일> --against 30-refine/evidence.md 40-spec/PRD.md 40-spec/SRS.md` — 미추적 0건 ✅. 미추적은 E-ID 등록 또는 [예시값]/[가정] 표기 후 제출 전 해소.
+4. `python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/trace_numbers.py <파일> --against 30-refine/evidence.md 40-spec/PRD.md 40-spec/SRS.md` — 미추적 0건 ✅. PRD·SRS가 서로를 근거로 삼지 않도록 대상이 `40-spec/PRD.md`면 `--against 30-refine/evidence.md`만, `40-spec/SRS.md`면 `--against 30-refine/evidence.md 40-spec/PRD.md`로 줄인다. 미추적은 E-ID 등록 또는 [예시값]/[가정] 표기 후 제출 전 해소.
 5. im-not-ai가 설치돼 있으면(Skill 도구 목록에 `humanize-korean:humanize-scan`이 있으면) Skill 도구로 대상 파일을 스캔해 AI 패턴 밀도를 기록한다. 없으면 보고서에 '미설치'로 적고 넘어간다.
 6. **contest:fact-checker** 호출(수동 전수 대조: 인용 존재, 요약↔본문, 산출물 이름 통일, 경쟁 평가 공정성, 스펙 밖 내용, 사람·경험, 절대 표현). 프롬프트에 작업 공간 절대 경로와 대상 파일 절대 경로를 넣고, 응답 전문을 `90-verify/factcheck-<파일명>-<날짜>.md`에 저장한다.
 7. 요강 대조(brief.md §2·§7): 분량·형식·용량·첨부 수·파일명·메일 제목·CC·기재 금지·필수 포함(AI 고지·라이선스·해시태그).

@@ -145,4 +145,6 @@ if python3 -I -c 'import json,sys; m=json.load(open(".claude-plugin/marketplace.
 if [ "$(tail -n 1 LICENSE)" = "SOFTWARE." ]; then echo "ok   LICENSE is the bare MIT text"; else echo "FAIL LICENSE has text after the MIT body (GitHub then shows Other)"; fail=1; fi
 hits=$(for w in 'gh auth setup-git' 'CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1' 'claude plugin update contest@contest-agent' 'pbakaus/impeccable(Apache License 2.0)' 'playbook.md'; do grep -qF -- "$w" README.md || echo "  README lacks: $w"; done)
 if [ -z "$hits" ]; then echo "ok   README covers private install, updates, external licenses, local-only playbook"; else echo "FAIL README:"; echo "$hits"; fail=1; fi
+hits=$(for f in agents/fact-checker.md skills/verify/SKILL.md; do grep -qF '`40-spec/PRD.md`면 `--against 30-refine/evidence.md`만' "$f" && grep -qF '`40-spec/SRS.md`면 `--against 30-refine/evidence.md 40-spec/PRD.md`' "$f" || echo "  $f"; done)
+if [ -z "$hits" ]; then echo "ok   PRD and SRS are not traced against each other"; else echo "FAIL PRD and SRS would trace their numbers through each other:"; echo "$hits"; fail=1; fi
 [ $fail -eq 0 ] && echo "ALL OK" || { echo "SOME FAILED"; exit 1; }
