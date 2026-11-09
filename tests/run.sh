@@ -81,4 +81,19 @@ here=$PWD; ( cd "$sc" && python3 -I "$here/$S/scaffold.py" --type idea >/dev/nul
 if [ $rc -eq 2 ] && [ ! -e "$sc/--type" ]; then echo "ok   (2) an option is not taken as the folder name"; else echo "FAIL (got $rc, want 2) scaffold took an option as the folder name"; fail=1; fi
 expect 1 python3 -I $S/scaffold.py "$sc/dev" --type dev --templates templates
 rm -rf "$sc"
+names=$(ls agents | sed 's/\.md$//' | paste -sd'|' -)
+hits=$(grep -rnoE "(^|[^:a-z-])($names)([^a-z-]|$)" skills)
+if [ -z "$hits" ]; then echo "ok   skills name agents as contest:<agent>"; else echo "FAIL agent names without the contest: prefix:"; echo "$hits"; fail=1; fi
+hits=$(grep -rnoE '(^|[^/}A-Za-z_-])(references|templates|scripts)/' agents skills)
+if [ -z "$hits" ]; then echo "ok   agents and skills reach plugin files through \${CLAUDE_PLUGIN_ROOT}"; else echo "FAIL relative plugin paths (they resolve against the workspace):"; echo "$hits"; fail=1; fi
+hits=$(for a in $(grep -L '^tools:.*Write' agents/*.md); do
+  grep -q '최종 응답' "$a" || echo "  $a: no Write tool and no 최종 응답 contract"
+  n=$(basename "$a" .md)
+  for s in $(grep -l "contest:$n" skills/*/SKILL.md); do grep -q '응답 전문' "$s" || echo "  $s: calls contest:$n but never saves its 응답 전문"; done
+done)
+if [ -z "$hits" ]; then echo "ok   read-only agents answer in full and their callers save it"; else echo "FAIL read-only agent output would be lost:"; echo "$hits"; fail=1; fi
+hits=$(for a in $(grep -lE 'impeccable|humanize' agents/*.md); do grep -q '^tools:.*Skill' "$a" || echo "  $a"; done)
+if [ -z "$hits" ]; then echo "ok   agents that use external skills have the Skill tool"; else echo "FAIL agents told to use external skills lack the Skill tool:"; echo "$hits"; fail=1; fi
+hits=$(grep -lE '^(permissionMode|hooks|mcpServers):' agents/*.md | sed 's/^/  /')
+if [ -z "$hits" ]; then echo "ok   no frontmatter that plugin agents ignore"; else echo "FAIL plugin agents ignore permissionMode/hooks/mcpServers:"; echo "$hits"; fail=1; fi
 [ $fail -eq 0 ] && echo "ALL OK" || { echo "SOME FAILED"; exit 1; }

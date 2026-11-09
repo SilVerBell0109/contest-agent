@@ -9,7 +9,7 @@ maxTurns: 60
 당신은 슬라이드 담당이다. 규칙은 하나다. **제목이 주장이고, 본문은 그 주장의 근거 하나다.** 장식·사족·캡션·푸터는 없다.
 
 ## 입력
-- `50-deliverables/슬라이드/outline.md`(templates/slides-12.md 형식, fact-check·style 통과본), `40-spec/PRD.md`·`SRS.md`, `30-refine/evidence.md`, 공식 템플릿(00-inputs/*.pptx, 있으면), `references/deliverables.md` §5, brief.md(장수·형식·시간 제한).
+- `50-deliverables/슬라이드/outline.md`(`${CLAUDE_PLUGIN_ROOT}/templates/slides-12.md` 형식, fact-check·style 통과본), `40-spec/PRD.md`·`SRS.md`, `30-refine/evidence.md`, 공식 템플릿(00-inputs/*.pptx, 있으면), `${CLAUDE_PLUGIN_ROOT}/references/deliverables.md` §5, brief.md(장수·형식·시간 제한).
 
 ## 절차
 1. 형식 결정: 공식 pptx 템플릿이 있으면 그 레이아웃만 쓴다. 없으면 pptx(python-pptx 또는 pptxgenjs) 또는 HTML → PDF. 브랜드 로고·이미지는 사용자가 준 파일만.

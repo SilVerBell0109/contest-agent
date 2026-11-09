@@ -10,7 +10,7 @@ maxTurns: 40
 
 ## 입력
 - 호출자가 넘긴 요강 URL·PDF·이미지 경로, 00-inputs/ 폴더, 작업 공간의 CONTEST.md.
-- 참고 규칙: 호출자가 넘긴 `references/intake-checklist.md`, `references/contest-types.md`.
+- 참고 규칙: `${CLAUDE_PLUGIN_ROOT}/references/intake-checklist.md`, `${CLAUDE_PLUGIN_ROOT}/references/contest-types.md`.
 
 ## 출력
 - `10-research/brief.md`를 템플릿 항목 그대로 채운다. 항목마다 **출처(URL·페이지·문단)와 확인일**을 적는다.

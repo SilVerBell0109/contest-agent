@@ -13,8 +13,8 @@ PRD·SRS는 산출물의 유일한 원천이다. 여기 없는 기능·숫자는
 - `--update "…"`면 이미 승인된 PRD·SRS의 변경 요청이다: 변경 절·근거·날짜를 §변경 기록에 적고, traceability §4로 **일관성 전파**(목표·KPI·유저플로우·일정·역할·예산·기대효과·산출물)를 확인한 뒤 재승인을 받는다.
 
 ## 절차
-1. **spec-writer** 서브에이전트 호출 → `40-spec/PRD.md`, `SRS.md`, `traceability.md`. 프롬프트에 작업 공간·references·템플릿 절대 경로, 유형, brief.md의 심사 기준 표, 사용자 작업 원칙(any 금지, .env, 테스트 먼저)을 넣는다.
-2. **fact-checker** 호출(PRD·SRS 대상) → 숫자·E-ID·범위 밖·자리표시 점검. '차단'이 있으면 spec-writer에게 돌려 고친다.
+1. **contest:spec-writer** 서브에이전트 호출 → `40-spec/PRD.md`, `SRS.md`, `traceability.md`. 프롬프트에 작업 공간·references·템플릿 절대 경로, 유형, brief.md의 심사 기준 표, 사용자 작업 원칙(any 금지, .env, 테스트 먼저)을 넣는다.
+2. **contest:fact-checker** 호출(PRD·SRS 대상, 프롬프트에 작업 공간 절대 경로와 두 파일 절대 경로) → 숫자·E-ID·범위 밖·자리표시 점검. 응답 전문을 `90-verify/factcheck-PRD-SRS-<날짜>.md`에 저장한다. '차단'이 있으면 contest:spec-writer에게 돌려 고친다.
 3. 메인 에이전트 점검:
    - PRD §7 기능 표의 각 행에 심사 기준 대응 칸이 채워져 있는가. 없는 기능은 P2 또는 범위 밖.
    - SRS의 AC가 전부 측정 가능한가(숫자·조건·방법). "정확하게/빠르게/편리하게" 검색해 0건.

@@ -17,11 +17,11 @@ allowed-tools: Bash(python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/scan_placeholders.p
 ## 절차
 서브에이전트(Agent 도구)를 순서대로 부른다. 프롬프트에는 **작업 공간 절대 경로, 참조 파일 절대 경로(`${CLAUDE_SKILL_DIR}/../../references/…`), 템플릿 경로, 유형**을 넣는다. 서브에이전트는 대화 맥락을 모른다.
 
-1. **brief-analyst** → `10-research/brief.md`, CONTEST.md 기본 정보. 결과에서 "운영진에게 물을 것"과 "가장 위험한 제약"을 사용자에게 바로 보여 준다.
-2. **org-researcher** → `10-research/org.md`, `30-refine/evidence.md` E-ID 등록 시작.
-3. **domain-researcher** → `10-research/domain.md`, `10-research/competitors.md`(두 축 중복 점검). 2·3은 병렬 가능.
-4. **user-researcher** → `10-research/users.md`(페르소나·as-is·to-be 유저플로우·사람 이야기·시연 장면 후보).
-5. 유형 보강: `ad`면 org-researcher에 "전년도 수상작 문법 분석" 추가, `application`이면 brief-analyst에 "문항 → 평가 축 매핑"과 "주최사 사업 모델" 추가, `program`이면 양식 고정 규칙(항목 추가·삭제 금지, ✅ 질문) 추출을 강조한다.
+1. **contest:brief-analyst** → `10-research/brief.md`, CONTEST.md 기본 정보. 결과에서 "운영진에게 물을 것"과 "가장 위험한 제약"을 사용자에게 바로 보여 준다.
+2. **contest:org-researcher** → `10-research/org.md`, `30-refine/evidence.md` E-ID 등록 시작.
+3. **contest:domain-researcher** → `10-research/domain.md`, `10-research/competitors.md`(두 축 중복 점검). 2·3은 병렬 가능.
+4. **contest:user-researcher** → `10-research/users.md`(페르소나·as-is·to-be 유저플로우·사람 이야기·시연 장면 후보).
+5. 유형 보강: `ad`면 contest:org-researcher에 "전년도 수상작 문법 분석" 추가, `application`이면 contest:brief-analyst에 "문항 → 평가 축 매핑"과 "주최사 사업 모델" 추가, `program`이면 양식 고정 규칙(항목 추가·삭제 금지, ✅ 질문) 추출을 강조한다.
 6. **통합 점검**(메인 에이전트가 직접):
    - evidence.md의 E-ID 번호 중복·누락, ✅/⚠️/❓ 개수.
    - 네 문서가 서로 어긋나는 사실(예: 주최사 인원 수가 org와 domain에서 다름)을 찾아 evidence에 "상충" 표기.
