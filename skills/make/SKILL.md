@@ -20,7 +20,7 @@ allowed-tools: Bash(python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/count_chars.py *)
    - 종류별 담당: 슬라이드 → 메인 에이전트가 outline을 쓰고 2~4를 통과한 뒤 **contest:deck-builder**(아래 `슬라이드`), 발표대본 → **contest:deck-builder**, 화면예시 → **contest:ui-designer**, mvp·project → **contest:mvp-builder**, 나머지 문서는 메인 에이전트가 직접 쓴다.
 2. **사실 검증**: **contest:fact-checker** 호출. 응답 전문을 `90-verify/factcheck-<파일명>-<날짜>.md`에 저장한다. '차단' 0이 될 때까지 고친다(고치는 쪽은 초안 작성자).
 3. **문체**(`form`·코드 제외): `--no-humanize`가 아니고 im-not-ai가 설치돼 있으면(Skill 도구 목록에 `humanize-korean:humanize-scan`이 있으면) Skill 도구로 `humanize-korean:humanize-scan`에 대상 파일을 넘겨 전체 패스가 필요한지 본다. 필요하면 파일 본문을 Read로 읽어 `humanize-korean:humanize-korean`에 넘기고, 결과는 스킬이 알려 준 경로(보통 `_workspace/<실행 폴더>/final.md`)에서 읽는다. 끝의 HUMANIZE-SUMMARY 블록을 뺀 본문을 원본과 대조해(의미·수치·고유명사·직접 인용 불변, 변경률 30% 경고·50% 중단) 통과하면 다음 버전으로 저장한다. 작업 공간 루트에 `_workspace/`가 생겼으면 `90-verify/humanize/`로 옮긴다. 설치돼 있지 않으면 건너뛴다. 그다음 **contest:style-editor** 호출(check_style S1 0건, 전/후 표).
-4. **검수**: `/contest:verify <파일>` 절차 실행(자리표시 `--plain`은 제출용 txt에, 글자 수, 숫자 추적, 요강 대조). ❌가 있으면 1로 돌아간다.
+4. **검수**: `/contest:verify <파일>` 절차 실행(자리표시 `--plain`은 제출용 txt에, 글자 수, 숫자 추적, 요강 대조). ❌ 중 담당이 에이전트인 것이 있으면 고친 뒤 1로 돌아간다. `【 】` 채우기·서명처럼 사용자 담당 ❌만 남으면 그 목록(위치 포함)을 보고하고 멈춘다("제출 가능"이라고 말하지 않는다).
 5. **모의 심사**(`--judge` 또는 기획서·슬라이드·지원서 기본): **contest:judge-simulator** 호출 → 응답 전문을 `90-verify/judge-<파일명>-<날짜>.md`에 저장. 깎인 항목을 고치고 재검수. 최대 2회.
 6. **인도**: 편집 가능한 형태(md + docx/pptx/pdf, 요청 시 Google Doc) + 폼 접수면 붙여넣기용 `.txt`(□·①·→만, 마크다운 없음). CONTEST.md 산출물 표에 fact/style/verify/judge 결과와 버전을 기록.
 
