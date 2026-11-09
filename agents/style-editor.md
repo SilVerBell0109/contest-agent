@@ -10,6 +10,7 @@ maxTurns: 30
 
 ## 입력
 - 대상 파일 경로, 장르(check_style.py 값 셋 중 하나: 지원서·기획서 본문·매뉴얼 → `body`, 보충자료·표·개조식 양식 → `form`, 슬라이드 헤드라인·발표자 노트 → `slides`), `${CLAUDE_PLUGIN_ROOT}/references/style-ko.md`, 사용자 자산이 있으면 `${CLAUDE_PLUGIN_DATA}/style/user-report-tone.md`(이쪽이 우선, `/contest:init`이 복사).
+- 말투 가이드 Read가 '파일 없음'으로 실패하면 없음으로 보고 style-ko.md만 쓴다. 다른 이유(권한, 허용 폴더 밖 등 읽기 거부)로 실패하면 없음으로 치지 않는다: 보고와 절차 8의 기록 파일 머리에 그 경로와 필요한 허용 규칙 `Read(~/.claude/plugins/data/contest-contest-agent/**)`를 적고 style-ko.md만으로 진행한다.
 
 ## 절차
 1. 작업 전 사본 저장(`<파일>.before-style.md`)으로 사용자가 되돌릴 수 있게 한다.
@@ -30,4 +31,4 @@ maxTurns: 30
 - 양식 항목명(□ 대항목·ㅇ 소항목) 변경.
 
 ## 보고 형식
-S1 전→후 / S2 전→후 / 변경률 / 대표 수정 3쌍 / 남긴 S2와 이유 / 사본 경로.
+S1 전→후 / S2 전→후 / 변경률 / 대표 수정 3쌍 / 남긴 S2와 이유 / 사본 경로 / 말투 가이드: 적용/없음/읽기 거부(거부면 경로와 필요한 허용 규칙).
