@@ -76,17 +76,21 @@ def analyze(text: str, genre: str):
             continue
         lines = sorted({text.count("\n", 0, m.start()) + 1 for m in hits})
         results.append({"label": label, "severity": sev, "count": len(hits), "lines": lines[:12], "fix": fix})
-    # 리듬: 같은 종결어미 반복('~습니다.'·'~입니다.' 등 '~니다.'가 6회 이상 연속)
-    sents = re.split(r"(?<=[.!?])\s+", text)
-    run, max_run = 0, 0
-    for s in sents:
-        if s.strip().endswith("니다."):
-            run += 1; max_run = max(max_run, run)
-        else:
-            run = 0
+    # 리듬: 한 문단에서 같은 종결('~습니다.'·'~입니다.'·'~합니다.'처럼 '니다.' 앞 음절까지 같은 것)이 6회 이상 연속.
+    # 합쇼체 본문은 거의 모든 문장이 '~니다.'로 끝나므로 '니다.'만 보면 정상 본문이 걸린다. 빈 줄·소제목(#, □)에서 다시 센다.
+    max_run, max_end = 0, ""
+    for block in re.split(r"\n\s*\n|\n(?=[ \t]*[#□])", text):
+        run, prev = 0, None
+        for s in re.split(r"(?<=[.!?])\s+", block):
+            s = s.strip()
+            end = s[-4:-1] if len(s) >= 4 and s.endswith("니다.") else None
+            run = run + 1 if end and end == prev else (1 if end else 0)
+            prev = end
+            if run > max_run:
+                max_run, max_end = run, end
     if max_run >= 6:
-        results.append({"label": "리듬: '~니다.' 연속 %d문장" % max_run, "severity": "S2", "count": max_run,
-                        "lines": [], "fix": "단문·명사형·질문 등을 섞기"})
+        results.append({"label": "리듬: 같은 종결 '~%s.' 연속 %d문장" % (max_end, max_run), "severity": "S2", "count": max_run,
+                        "lines": [], "fix": "어미를 바꿔 섞기(본문은 합쇼체 안에서 ~습니다·~입니다·~합니다, 양식·슬라이드는 명사구도)"})
     return results
 
 

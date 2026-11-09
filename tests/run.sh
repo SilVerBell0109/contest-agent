@@ -40,7 +40,7 @@ printf '검증 결과 ✅ 통과입니다.\n' > "$cs/body.md"; expect 1 cst "$cs
 printf '🚀 출시 계획\n' > "$cs/rocket.md"; expect 1 cst "$cs/rocket.md" --genre slides
 printf '이것은 사과입니다. 저것은 배입니다. 그것은 감입니다. 여기는 집입니다. 거기는 학교입니다. 저기는 공원입니다.\n' > "$cs/rhythm.md"
 out=$(cst "$cs/rhythm.md" --genre body --strict 2>&1); rc=$?
-if [ $rc -eq 1 ] && printf '%s\n' "$out" | grep -qF "리듬: '~니다.' 연속 6"; then echo "ok   (1) rhythm counts every '~니다.' ending, not only '~습니다.'"; else echo "FAIL (got $rc) rhythm missed six '~입니다.' endings"; fail=1; fi
+if [ $rc -eq 1 ] && printf '%s\n' "$out" | grep -qF "리듬: 같은 종결 '~입니다.' 연속 6"; then echo "ok   (1) rhythm flags six identical '~입니다.' endings, not only '~습니다.'"; else echo "FAIL (got $rc) rhythm missed six '~입니다.' endings"; fail=1; fi
 rm -rf "$cs"
 expect 1 python3 -I $S/count_chars.py $T/clean-body.txt --limit 100
 expect 0 python3 -I $S/count_chars.py $T/clean-body.txt --limit 5000
@@ -198,4 +198,14 @@ hits=$( grep -qF '`50-deliverables/슬라이드/`·`발표대본/`·`시연대�
   grep -qF '`/contest:verify <파일> --genre <장르>`' skills/make/SKILL.md || echo "  skills/make: step 4 runs verify without a genre"
   grep -qF '슬라이드 헤드라인·발표자 노트·발표대본·시연대본 → `slides`' agents/style-editor.md || echo "  style-editor: scripts are not mapped to slides" )
 if [ -z "$hits" ]; then echo "ok   verify, make and style-editor pick the genre by the hook's folder rule"; else echo "FAIL verify/make guess the genre the hook and style-editor already fix:"; echo "$hits"; fail=1; fi
+rb=$(mktemp -d)
+printf '자료를 모았습니다. 문제는 분명합니다. 원인은 셋입니다. 흐름이 바뀝니다. 기록이 남습니다. 점수가 오릅니다.\n' > "$rb/mixed.md"
+printf '## 배경\n가는 첫째입니다. 나는 둘째입니다. 다는 셋째입니다.\n\n## 방법\n라는 넷째입니다. 마는 다섯째입니다. 바는 여섯째입니다.\n' > "$rb/sections.md"
+printf '□ 배경\n가는 첫째입니다. 나는 둘째입니다. 다는 셋째입니다.\n□ 방법\n라는 넷째입니다. 마는 다섯째입니다. 바는 여섯째입니다.\n' > "$rb/boxes.md"
+printf '자료를 모았습니다. 사람을 만났습니다. 기록을 남겼습니다. 화면을 그렸습니다. 앱을 만들었습니다. 결과를 얻었습니다.\n' > "$rb/seup.md"
+hits=$( for f in mixed sections boxes; do out=$(cst "$rb/$f.md" --genre body --strict 2>&1) && ! printf '%s\n' "$out" | grep -q '리듬' || echo "  $f.md: normal 합쇼체 flagged as a monotone run"; done
+  out=$(cst "$rb/seup.md" --genre body --strict 2>&1); rc=$?; [ $rc -eq 1 ] && printf '%s\n' "$out" | grep -qF "리듬: 같은 종결 '~습니다.' 연속 6" || echo "  seup.md: six '~습니다.' endings not flagged (got $rc)" ); rm -rf "$rb"
+if [ -z "$hits" ]; then echo "ok   rhythm counts only identical endings, and restarts at a blank line or heading"; else echo "FAIL rhythm flags normal 합쇼체 prose or misses a real run:"; echo "$hits"; fail=1; fi
+r4=$(grep -E '^4\. 리듬:' agents/style-editor.md)
+if printf '%s\n' "$r4" | grep -qF '같은 종결' && printf '%s\n' "$r4" | grep -qF 'body는 합쇼체 안에서'; then echo "ok   style-editor breaks body rhythm runs inside 합쇼체"; else echo "FAIL style-editor would break body runs with noun phrases (body stays 합쇼체):"; echo "  $r4"; fail=1; fi
 [ $fail -eq 0 ] && echo "ALL OK" || { echo "SOME FAILED"; exit 1; }

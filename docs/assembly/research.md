@@ -189,3 +189,17 @@
 - Final: Ruling: 시연대본·발표대본 폴더도 `slides`로 검사 — deliverables.md:19-20과 templates/demo-script.md가 구어체 내레이션 표이고, style-editor가 이미 `slides`로 보는 '발표자 노트'와 같은 글이다. style-editor 장르 목록에도 두 대본을 넣었다 — 비용: 두 대본에 ✅·❶ 같은 기호가 들어가도 훅과 verify 기본값은 S2 안내만 하고(`--strict`에서 3개 이상일 때만 실패), style-editor는 합쇼체로 바꾸지 않는다.
 - Final: Ruling: 훅은 폴더만 보고 장르를 정하고, 공식 양식이 개조식인지(format-rules.md)는 보지 않는다 — 훅 안에서 양식 문서를 해석하지 않으려고. `--strict` 없는 기본 검사에서 장르 차이는 기호 이모지 S1 하나뿐이고, 개조식 양식이 쓰는 ①②③·→·○△×는 그 범위(U+2600~27BF) 밖이라 body로도 통과한다 — 비용: 개조식 양식 기획서에 ✅·❶을 쓰면 저장할 때마다 훅이 '실패'를 알린다. verify는 make 4단계가 `--genre form`을 넘겨서 통과한다.
 - Final: fixed 저장 훅이 50-deliverables 전부를 `--genre body`로 검사해 슬라이드 outline의 ❶❷❸, 보충자료 표의 ✅❌가 저장할 때마다 '실패' systemMessage를 냄 + verify 2단계에 장르 규칙 없음 + make 4단계가 장르를 넘기지 않음 — run.sh "hook picks the genre by folder (슬라이드·발표대본·시연대본 slides, 보충자료 form, else body)"(기획서 ✅ → systemMessage 회귀 가드 포함)·"verify, make and style-editor pick the genre by the hook's folder rule" RED→GREEN, suite 105/105
+- Final: fixed 리듬 검사가 '~니다.'로 끝나는 문장을 모두 같은 종결로 세어, 어미를 섞은 정상 합쇼체 본문도 6문장이 이어지면 S2×6으로 `--strict`에서 실패함 + style-editor 4단계가 body의 6연속을 명사구로 끊으라고 해 '본문은 합쇼체' 규칙과 어긋남 — check_style은 '니다.' 앞 음절까지 같은 종결(~습니다./~입니다./~합니다.)만 이어 세고 빈 줄·소제목(#, □)에서 다시 센다. style-editor 4단계는 body를 합쇼체 안에서 서술어를 바꿔 끊고, 명사구는 form·slides에만 — run.sh "rhythm counts only identical endings, and restarts at a blank line or heading"·"style-editor breaks body rhythm runs inside 합쇼체"·"(1) rhythm flags six identical '~입니다.' endings, not only '~습니다.'"(라벨 갱신) RED→GREEN, suite 107/107
+- 정정: "소유자 위임 후속"의 리듬 Ruling(이 파일 168행) 비용 "실패는 `--strict`에서 6연속 이상일 때뿐"은 틀렸다. 합쇼체 본문은 거의 모든 문장이 '~니다.'로 끝나서, 어미를 섞은 정상 본문도 `--strict`에서 실패했다. 위 수정으로 같은 종결이 6번 이어질 때만 센다.
+- Final: Ruling: 글머리표(`- `) 줄은 문단을 끊지 않는다 — 항목 6개가 모두 같은 어미로 끝나면 실제로 단조롭고, 원래 주석의 '문단 안에서'에 맞춰 경계는 빈 줄과 소제목(#, □)으로만 정했다 — 비용: 항목마다 '~입니다.'로 끝나는 6개 이상 목록은 기본 검사에서 S2 안내, `--strict`에서 실패한다(시험 파일 review/rhythm/bullets.md로 확인).
+- Final: Ruling: (리뷰어 판단 보류 a) 합쇼체 본문을 명사구로 끊으라는 style-editor 문구 — finding으로 올려 위 수정에 넣었다(body는 합쇼체 안에서 서술어를 바꾼다) — 비용: 거의 없음. form·slides는 명사구를 그대로 허용한다.
+- Final: Ruling: (판단 보류 b) `-p`에서 말투 가이드가 없을 때 '파일 없음' 대신 '읽기 거부'로 보고될 수 있음 — 그대로 둔다. 안내가 필요한 허용 규칙을 알려 주고, 규칙을 넣은 뒤의 '파일 없음'은 가이드가 없다는 뜻이다 — 비용: 가이드를 복사한 적 없는 사용자는 한 번 잘못된 안내(권한 문제처럼 보이는 줄)를 본다.
+- Final: Ruling: (판단 보류 c) HTML 목업이 mvp-plan `승인:` 전에 막히는 '코드'인지 — 아래 minor 4와 묶어 소유자가 보호 템플릿을 정할 때까지 둔다 — 비용: 아이디어 공모전에서 화면예시가 승인 전에 막힐 수 있다.
+- Final: minor (deferred): make 5단계가 judge-simulator에 라운드 번호를 넘기지 않아 make의 2회차 심사도 '(라운드 1)'로 적힌다(make는 자체 '최대 2회'가 있고 run.sh 178행 린트는 make를 보지 않는다).
+- Final: minor (deferred): templates/CLAUDE.workspace.md 6행이 mvp-plan `승인:` 전 모든 코드를 막아, 아이디어 공모전에서 ui-designer HTML/CSS·deck-builder python-pptx까지 막힐 수 있다(보호 템플릿이라 소유자 승인 필요).
+- Final: minor (deferred): 주제 카드 린트(run.sh 172~176행)가 11개 행의 순서는 보지 않는다.
+- Final: minor (deferred): 이번 리뷰 전부터 있던 이모지 누락 — U+2B50·2B55·23F0·23F3, U+2B06/2194/25B6+FE0F, 키캡, U+1F195, 국기(지역 표시 문자)는 body에서 통과하고, ZWJ 시퀀스는 두 번 센다.
+- Final: minor (deferred): 코드 블록·양식 항목명 제외가 없다(이전부터) — form의 `□ 사업 개요 — 목적과 필요성`은 고칠 수 없는 S1 줄표, 코드 블록은 S1·S2를 낸다.
+- Final: minor (deferred): 문장 분리 경계(놓침만 생김) — '니다.)'·'니다."'·'니다(E-01).'는 세지 않고, '니다!'·'니다?'는 연속을 끊는다.
+- Final: minor (deferred): topics/SKILL.md 22행이 아직 "한 줄 정의"(카드 행은 "한 문장 컨셉"), run.sh 39~40행 `expect 1`은 scripts-11의 약점을 그대로 물려받았다.
+- 진행: 수정 패스 끝(Important 2건 모두 RED→GREEN, suite 107/107). 다음: 0.1.2 버전 올림 → validate·스위트 → push(88ff297·7bb446f 포함) → 설치본 갱신·확인 → 메모리 → 최종 보고.
