@@ -15,6 +15,10 @@ expect 0 python3 -I $S/trace_numbers.py $T/numbers.md --against $T/evidence.md -
 tmp=$(mktemp -d); mkdir -p "$tmp/50-deliverables"; cp $T/placeholders-and-ai-style.md "$tmp/50-deliverables/x.md"
 out=$(echo "{\"tool_input\":{\"file_path\":\"$tmp/50-deliverables/x.md\"}}" | CLAUDE_PLUGIN_ROOT=$PWD bash $S/post_write_check.sh); rc=$?
 if [ $rc -eq 0 ] && echo "$out" | grep -q "자리표시"; then echo "ok   (0) hook warns"; else echo "FAIL hook"; fail=1; fi
+if echo "$out" | python3 -I -c 'import json,sys; d=json.load(sys.stdin); sys.exit(not ("자리표시" in d["hookSpecificOutput"]["additionalContext"] and d.get("systemMessage")))' 2>/dev/null; then echo "ok   hook JSON reaches Claude and user"; else echo "FAIL hook JSON (additionalContext/systemMessage)"; fail=1; fi
+cp $T/clean-body.txt "$tmp/50-deliverables/ok.md"
+out=$(echo "{\"tool_input\":{\"file_path\":\"$tmp/50-deliverables/ok.md\"}}" | bash $S/post_write_check.sh); rc=$?
+if [ $rc -eq 0 ] && echo "$out" | python3 -I -c 'import json,sys; d=json.load(sys.stdin); sys.exit("systemMessage" in d)' 2>/dev/null; then echo "ok   (0) hook silent to user when clean"; else echo "FAIL hook clean"; fail=1; fi
 rm -rf "$tmp"
 sc=$(mktemp -d); for t in dev idea ad application program; do expect 0 python3 -I $S/scaffold.py "$sc/$t" --type $t --templates templates; done
 if grep -rq "{{" "$sc"; then echo "FAIL template braces left"; fail=1; else echo "ok   no {{ }} left after scaffold"; fi
