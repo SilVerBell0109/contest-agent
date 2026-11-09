@@ -1,7 +1,7 @@
 # contest 플러그인 조립·검증 기록
 
 작업: CLAUDE_CODE_PROMPT.md 1~10단계 + plan.md §7 → GitHub 업로드 (2026-11-09 시작)
-이어받을 때: 이 파일부터 읽는다. 로그·임시 파일은 작업 임시 폴더 `$J=~/.claude/jobs/a72d83da/tmp/`(커밋하지 않음)(logs/, docs/, hookfix/, e2e-brief.md, tools/summ.py)에 있다. 옛 스크래치패드(/private/tmp/claude-…)는 더 쓰지 않는다. 예외: E2E 작업 공간은 `/private/tmp/contest-e2e-a72d83da` — `$J`가 보호 경로 `.claude/` 아래라 그 안에서는 쓰기가 거부된다.
+이어받을 때: 이 파일부터 읽는다. 로그·임시 파일은 작업 임시 폴더 `$J=~/.claude/jobs/a72d83da/tmp/`(커밋하지 않음)(logs/, docs/, hookfix/, e2e-brief.md, tools/summ.py)에 있었다(push 뒤 모두 삭제 — 로그·감사 원문은 이 파일의 요약만 남음). 옛 스크래치패드(/private/tmp/claude-…)는 더 쓰지 않는다. 예외: E2E 작업 공간은 `/private/tmp/contest-e2e-a72d83da` — `$J`가 보호 경로 `.claude/` 아래라 그 안에서는 쓰기가 거부된다.
 
 ## 결정(Ruling) — 틀렸을 때 비용
 - 이름: 저장소 `contest-agent`, 플러그인 `contest`, 마켓플레이스 `contest-agent` — 기존 문서 전부와 일치. 바꾸면 README·plan·명령 표기 전부 수정.
@@ -136,7 +136,10 @@
 7. (완료 1b43840) run(PS-03), judge `$ARGUMENTS`(PS-06), make humanize·$0 문구·count_chars 명령(PS-05/DC-02/PS-20), refine 라운드 순서(W08/DC-12), research `--only` 대응(W16), topics 기준(DC-04/W23), mvp-builder(PS-18/W18), 에이전트 description 범위(PS-21).
 8. (완료 26249ed) marketplace description·version(PS-15/16, CLAUDE.md:6), LICENSE MIT 인식(DC-14), README 비공개 설치 전제·playbook 로컬 전용(DC-07).
 9. (완료 ddec9b8·7cd2e59·4d596f8·f8bfb4b·40c6cdb·285e177·8522a80) 최종 리뷰 워크플로 wgdlz325t(opus ≤3)·E2E 2차 bos9q5gl6 결과 분류 → 수정 1회(각각 RED→GREEN, 스위트 92/92). 수정·판정·보류는 아래 '최종 리뷰 수정 1회'와 위 분류 절.
-10. (진행) push(private, SilVerBell0109/contest-agent) → `$J`·`/private/tmp/contest-e2e-a72d83da` 정리 → 보고 → 메모리.
+10. (완료 99d601a) push(private, SilVerBell0109/contest-agent): 원격 main = 로컬 99d601a, PRIVATE, 추적 파일 91 = 원격 91, 민감 파일 0.
+    - 원격 설치 확인(격리한 `CLAUDE_CONFIG_DIR`, HTTPS + gh 자격): `claude plugin marketplace add SilVerBell0109/contest-agent`·`claude plugin install contest@contest-agent` exit 0, `contest@contest-agent` 0.1.0 enabled. 캐시 `plugins/cache/contest-agent/contest/0.1.0/`(README 허용 규칙 경로와 같음), 스킬 11·에이전트 12·hooks.json, 저장소와 바이트 동일(`.in_use` 표식만 다름), 실제 `~/.claude` 설정 무변경.
+    - HEAD 재검증: `claude plugin validate .` exit 0(경고 ICON_MISSING 1), `bash tests/run.sh` 92/92 ALL OK, scaffold 5유형 모두 17파일·하위 폴더 7·`{{` 0, 비어 있지 않은 폴더 재실행 exit 1, SKILL.md 최대 52줄(make), 에이전트 description 합계 1,397자.
+    - `$J`·`/private/tmp/contest-e2e-a72d83da` 삭제. 남은 일(저장소 밖): 최종 보고, 메모리 파일.
 
 ## 최종 리뷰 수정 1회(각 RED→GREEN, 전체 스위트)
 - Final: fixed scripts-4 (TODO/TBD/XXX + 한글 조사) — run.sh "flags TODO/TBD/XXX before a Korean particle" RED→GREEN, suite 78/78
