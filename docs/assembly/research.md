@@ -168,3 +168,4 @@
 - Ruling: 리듬 검사를 '~습니다.'에서 '~니다.'로 넓힘 — '~입니다.'로 끝나는 합쇼체 6연속을 놓쳤다 — 비용: 합쇼체 본문에 S2 리듬 지적이 늘지만 실패는 `--strict`에서 6연속 이상일 때뿐이다.
 - 진행: W22 check_style 기호 이모지 장르별 등급·리듬 '~니다.', style-editor 리듬 문구. run.sh form 표 ✅❌ → 0, slides ❶❷❸ → 0, "rhythm counts every '~니다.' ending" RED→GREEN(+ body ✅ → 1, slides 🚀 → 1 회귀 가드, clean-body `--strict` 통과 유지), suite 98/98.
 - 진행: W23 topic-strategist 카드를 templates/topics.md §1의 11항목 이름·순서로 맞춤. 옛 항목 중 템플릿에 없던 것(○△×, 데이터 공개 여부, 핵심 기술, 리스크, 예상 첫 질문)은 가장 가까운 행의 괄호 안으로 옮김. run.sh "topic-strategist writes the 11-row card of templates/topics.md §1"(템플릿 행을 직접 읽어 대조, 11행 아니면 실패) RED→GREEN, suite 99/99.
+- 진행: W24 templates/judge-review.md §6에 '답이 있는 절' 열(refine 사전 점검 3이 읽는 칸), judge L15·refine 6단계가 라운드 번호를 프롬프트에 넣고 judge-simulator가 '(라운드 _)'를 채움(없으면 1). run.sh "judge-review records the answering section and the round number" RED→GREEN, suite 100/100.

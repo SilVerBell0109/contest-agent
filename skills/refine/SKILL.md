@@ -20,7 +20,7 @@ allowed-tools: Bash(python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/trace_numbers.py *)
 3. **유저플로우·시연**: users.md to-be 흐름을 화면·입력·반응 단위로 확정, 전후 시각표, 시연 장면 3~4개, 빈 상태·오류·오프라인 처리. contest:user-researcher 추가 호출 가능.
 4. **범위·기술·일정**: 한 줄기 완성 기준으로 P0/P1/P2, 공개 벤치마크·데이터 라이선스로 범위를 자른 근거, 기능×통과 기준, 일정+버퍼+축소 순서, 신뢰성 설계(결정적 계산, 검증 게이트, 상태 전이·멱등, 인젝션 방어), 보안·개인정보 기본값 표. 뺀 데이터·기능과 이유를 "범위 밖"에.
 5. **경쟁·차별**: 기능 단위 ○△× 비교표(△는 조건부로 인정, 공정하게), "이미 있지 않나"에 대한 한 문장 답, 폐기 후보의 가치를 확장 1순위로 흡수.
-6. **모의 심사**: contest:judge-simulator 호출 → 응답 전문을 `30-refine/judge-preview.md`에 저장(배점표 채점, 예상 질문 10개 + 한 문장 답, 첫 질문). 점수가 깎인 위치를 design.md에 반영. 최대 2회.
+6. **모의 심사**: contest:judge-simulator 호출(프롬프트에 라운드 번호 1 또는 2) → 응답 전문을 `30-refine/judge-preview.md`에 저장(배점표 채점, 예상 질문 10개 + 한 문장 답, 첫 질문). 점수가 깎인 위치를 design.md에 반영. 최대 2회.
 
 ## 관문 2 전 사전 점검(모두 통과해야 관문 2로 간다)
 1. design.md의 모든 숫자가 E-ID를 가진다: `python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/trace_numbers.py 30-refine/design.md --against 30-refine/evidence.md`(이 형태 그대로, 따옴표 없이, 다른 명령과 `;`·`&&`로 잇지 말고 단독으로 — 허용 규칙과 같아야 승인 없이 실행된다).

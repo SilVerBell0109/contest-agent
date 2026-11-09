@@ -174,4 +174,7 @@ hits=$( [ "$(printf '%s\n' "$rows" | grep -c .)" -eq 11 ] || echo "  templates/t
   printf '%s\n' "$rows" | while IFS= read -r r; do grep -qF -- "$r" agents/topic-strategist.md || echo "  topic-strategist lacks: $r"; done
   grep -n '한 줄 정의 / 사용자와 장면' agents/topic-strategist.md )
 if [ -z "$hits" ]; then echo "ok   topic-strategist writes the 11-row card of templates/topics.md §1"; else echo "FAIL topic-strategist card differs from templates/topics.md §1:"; echo "$hits"; fail=1; fi
+hits=$( grep -qF '| # | 질문 | 답(한 문장) | 답이 있는 절 | 근거 E-ID |' templates/judge-review.md || echo "  templates/judge-review.md §6 has no 답이 있는 절 column"
+  for f in skills/judge/SKILL.md skills/refine/SKILL.md agents/judge-simulator.md; do grep -qF '라운드 번호' "$f" || echo "  $f: never passes or fills the round number"; done )
+if [ -z "$hits" ]; then echo "ok   judge-review records the answering section and the round number"; else echo "FAIL judge-preview lacks the column refine pre-check 3 reads, or the round stays (라운드 _):"; echo "$hits"; fail=1; fi
 [ $fail -eq 0 ] && echo "ALL OK" || { echo "SOME FAILED"; exit 1; }
