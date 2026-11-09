@@ -11,6 +11,10 @@
 /plugin install contest@contest-agent
 ```
 
+비공개 저장소라 저장소 접근 권한이 필요합니다. Claude Code는 대화형 입력 없이 git을 실행하므로, SSH라면 암호를 묻지 않는 키(ssh-agent에 등록)와 known_hosts가, HTTPS라면 `gh auth login` 후 `gh auth setup-git`으로 저장한 자격이 있어야 합니다. 환경 변수 `GITHUB_TOKEN`만으로는 설치되지 않습니다. SSH 키가 없는 기기는 `CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1`을 설정합니다.
+
+업데이트: 이 마켓플레이스는 자동 업데이트가 기본으로 꺼져 있습니다. `/plugin marketplace update contest-agent` 또는 `claude plugin update contest@contest-agent`로 받습니다. 새 버전은 `plugin.json`의 `version`이 올라가야 설치됩니다.
+
 권장 외부 플러그인(없어도 동작, 있으면 품질이 오릅니다):
 
 ```
@@ -63,8 +67,8 @@
 
 ## 구성
 
-- `skills/` 11개 명령(`/contest:*`), `agents/` 12개 서브에이전트, `hooks/` 저장 후 점검, `scripts/` 6개, `templates/` 23개, `references/` 절차·기준·사례(cases/ 8건), `materials/` 원자료(연구 보고서·플레이북).
+- `skills/` 11개 명령(`/contest:*`), `agents/` 12개 서브에이전트, `hooks/` 저장 후 점검, `scripts/` 6개, `templates/` 23개, `references/` 절차·기준·사례(cases/ 8건), `materials/` 원자료(연구 보고서). 플레이북 `materials/playbook.md`는 팀원 실명·팀 문서 링크가 있어 저장소에 올리지 않고 소유자 기기에만 둡니다(플러그인 실행에는 쓰지 않음).
 - 사용자 원칙: 기획과 코딩 분리(승인 전 코드 금지) · 테스트 먼저 · 요청한 것만 · any 금지 · 시크릿은 .env · 본문은 합쇼체+1인칭, AI 티 제거.
 
 ## 라이선스
-MIT. impeccable(Apache-2.0)과 im-not-ai(MIT)는 복사하지 않고 설치해 호출합니다. `LICENSE` 참고.
+MIT(`LICENSE`). 다음 외부 프로젝트는 본문을 복제하지 않고 설치해 호출합니다: pbakaus/impeccable(Apache License 2.0), epoko77-ai/im-not-ai(Humanize KR, MIT License).

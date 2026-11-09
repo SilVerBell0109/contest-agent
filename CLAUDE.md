@@ -3,7 +3,7 @@
 이 폴더는 Claude Code 플러그인 `contest`의 소스다. 공모전 작업 공간이 아니다(작업 공간은 `/contest:init`으로 따로 만든다).
 
 ## 구조와 역할
-- `.claude-plugin/plugin.json`, `marketplace.json` — 매니페스트. 버전은 둘 다 같이 올린다.
+- `.claude-plugin/plugin.json`, `marketplace.json` — 매니페스트. 버전은 plugin.json에만 두고 릴리스마다 올린다(그대로 두면 설치한 사람은 캐시된 이전 버전에 머문다).
 - `skills/<name>/SKILL.md` — 명령 `/contest:<name>`. 500줄 이하. 공통 지식은 `references/`에 두고 `${CLAUDE_SKILL_DIR}/../../references/…`로 참조한다.
 - `agents/<name>.md` — 서브에이전트. 본문이 시스템 프롬프트다. 대화 맥락을 모르므로 입력 파일 경로를 호출자가 넘긴다.
 - `hooks/hooks.json` — PostToolUse(Write|Edit) → `scripts/post_write_check.sh` (경고만, exit 0).

@@ -123,4 +123,8 @@ if [ -z "$hits" ]; then echo "ok   topics follow topic-selection.md (field crite
 if [ "$(grep -c -- '--only' skills/research/SKILL.md)" -ge 2 ]; then echo "ok   research says what --only does"; else echo "FAIL research takes --only but never handles it"; fail=1; fi
 hits=$(for tok in $(grep -ohE '\{\{[A-Z_]+\}\}' $(ls templates/*.md | grep -vE '/(CONTEST|CLAUDE\.workspace)\.md$') | sort -u); do grep -qF "$tok" skills/make/SKILL.md || echo "  $tok"; done)
 if [ -z "$hits" ]; then echo "ok   make fills the {{ }} that scaffold leaves in later templates"; else echo "FAIL make never says how to fill:"; echo "$hits"; fail=1; fi
+if python3 -I -c 'import json,sys; m=json.load(open(".claude-plugin/marketplace.json", encoding="utf-8")); sys.exit(0 if m.get("description") and all("version" not in p for p in m["plugins"]) else 1)'; then echo "ok   marketplace has a description; version lives only in plugin.json"; else echo "FAIL marketplace.json needs a top-level description and no plugins[].version (plugin.json wins silently)"; fail=1; fi
+if [ "$(tail -n 1 LICENSE)" = "SOFTWARE." ]; then echo "ok   LICENSE is the bare MIT text"; else echo "FAIL LICENSE has text after the MIT body (GitHub then shows Other)"; fail=1; fi
+hits=$(for w in 'gh auth setup-git' 'CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1' 'claude plugin update contest@contest-agent' 'pbakaus/impeccable(Apache License 2.0)' 'playbook.md'; do grep -qF -- "$w" README.md || echo "  README lacks: $w"; done)
+if [ -z "$hits" ]; then echo "ok   README covers private install, updates, external licenses, local-only playbook"; else echo "FAIL README:"; echo "$hits"; fail=1; fi
 [ $fail -eq 0 ] && echo "ALL OK" || { echo "SOME FAILED"; exit 1; }

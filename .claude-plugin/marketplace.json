@@ -1,5 +1,6 @@
 {
   "name": "contest-agent",
+  "description": "소프트웨어 공모전 원스톱 에이전트(contest) 플러그인 마켓플레이스",
   "owner": {
     "name": "최종은 (SilVerBell0109)"
   },
@@ -7,8 +8,7 @@
     {
       "name": "contest",
       "source": "./",
-      "description": "소프트웨어 공모전 원스톱 에이전트 — 조사·주제·고도화·PRD/SRS·산출물 생성",
-      "version": "0.1.0"
+      "description": "소프트웨어 공모전 원스톱 에이전트 — 조사·주제·고도화·PRD/SRS·산출물 생성"
     }
   ]
 }
