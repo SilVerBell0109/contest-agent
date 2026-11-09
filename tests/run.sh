@@ -22,6 +22,14 @@ if [ $rc -eq 0 ] && echo "$out" | python3 -I -c 'import json,sys; d=json.load(sy
 rm -rf "$tmp"
 sc=$(mktemp -d); for t in dev idea ad application program; do expect 0 python3 -I $S/scaffold.py "$sc/$t" --type $t --templates templates; done
 if grep -rq "{{" "$sc"; then echo "FAIL template braces left"; fail=1; else echo "ok   no {{ }} left after scaffold"; fi
+if grep -rq "템플릿 없음" "$sc"; then echo "FAIL scaffold wrote a stub for a missing template"; fail=1; else echo "ok   every scaffolded file came from a template"; fi
+empty=$(mktemp -d); expect 2 python3 -I $S/scaffold.py "$sc/no-tpl" --type idea --templates "$empty"
+if [ -e "$sc/no-tpl" ]; then echo "FAIL scaffold created a folder despite missing templates"; fail=1; else echo "ok   missing templates stop before creating anything"; fi
+rmdir "$empty"
+expect 2 python3 -I $S/scaffold.py "$sc/x" --type
+expect 2 python3 -I $S/scaffold.py "$sc/x" --bogus
+here=$PWD; ( cd "$sc" && python3 -I "$here/$S/scaffold.py" --type idea >/dev/null 2>&1 ); rc=$?
+if [ $rc -eq 2 ] && [ ! -e "$sc/--type" ]; then echo "ok   (2) an option is not taken as the folder name"; else echo "FAIL (got $rc, want 2) scaffold took an option as the folder name"; fail=1; fi
 expect 1 python3 -I $S/scaffold.py "$sc/dev" --type dev --templates templates
 rm -rf "$sc"
 [ $fail -eq 0 ] && echo "ALL OK" || { echo "SOME FAILED"; exit 1; }
