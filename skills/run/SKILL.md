@@ -9,7 +9,7 @@ argument-hint: "<요강 URL 또는 파일…> | --continue [--pick N] | --make <
 사용자가 바라는 것은 "원스텝"이지만, 사용자가 반드시 직접 하는 관문이 셋 있다(주제 선택, PRD·SRS 승인, mvp-plan 승인). 이 명령은 **관문 사이를 쉬지 않고 달리고 관문에서 멈춘다**. 사용자가 자리를 비워도 멈춘 곳이 CONTEST.md에 남는다.
 
 ## 모드
-- `run <요강…>`: 작업 공간이 없으면 `/contest:init`을 먼저(폴더명·유형을 묻는다. 요강에서 유형을 추정해 기본값 제시) → `/contest:research` → `/contest:topics` → **관문 1에서 멈춤**.
+- `run <요강…>`: 작업 공간(CONTEST.md)이 없으면 요강에서 유형을 추정하고, 사용자에게 `/contest:init <폴더명> --type <추정 유형>`을 직접 입력하라고 안내한 뒤 멈춘다(init은 사용자만 실행할 수 있다. 만든 폴더에서 Claude Code를 다시 열고 같은 `run`을 다시 실행하면 이어진다). 작업 공간이 있으면 `/contest:research` → `/contest:topics` → **관문 1에서 멈춤**.
 - `run --continue [--pick N]`: 관문 1 답(`--pick N` 또는 사용자 메시지)을 기록 → `/contest:refine` → 관문 2 자동 → `/contest:spec` → **관문 3에서 멈춤**.
 - `run --make <종류…>`: 관문 3 승인 확인 → 종류마다 `/contest:make` 파이프라인 → `/contest:verify` → 결과 보고. `mvp`가 포함되면 `mvp-plan`을 먼저 만들고 **관문 4에서 멈춤**.
 
@@ -21,4 +21,4 @@ argument-hint: "<요강 URL 또는 파일…> | --continue [--pick N] | --make <
 5. 토큰·시간이 큰 작업(조사 4종, 모의 심사)은 서브에이전트로 분리해 메인 맥락을 지킨다. 병렬 가능한 것(org·domain)은 병렬.
 
 ## 사용자에게 처음에 한 줄
-"조사와 주제 추천까지 진행하고 주제 선택에서 멈추겠습니다. 결과는 <폴더>/CONTEST.md에 기록됩니다." 그다음 바로 시작한다.
+작업 공간이 있으면 "조사와 주제 추천까지 진행하고 주제 선택에서 멈추겠습니다. 결과는 <폴더>/CONTEST.md에 기록됩니다." 그다음 바로 시작한다. 없으면 위 init 안내가 첫 줄이다.

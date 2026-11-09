@@ -96,4 +96,31 @@ hits=$(for a in $(grep -lE 'impeccable|humanize' agents/*.md); do grep -q '^tool
 if [ -z "$hits" ]; then echo "ok   agents that use external skills have the Skill tool"; else echo "FAIL agents told to use external skills lack the Skill tool:"; echo "$hits"; fail=1; fi
 hits=$(grep -lE '^(permissionMode|hooks|mcpServers):' agents/*.md | sed 's/^/  /')
 if [ -z "$hits" ]; then echo "ok   no frontmatter that plugin agents ignore"; else echo "FAIL plugin agents ignore permissionMode/hooks/mcpServers:"; echo "$hits"; fail=1; fi
+hits=$(grep -rnE '/humanize(-scan)? <' skills agents references/deliverables.md)
+if [ -z "$hits" ]; then echo "ok   im-not-ai is reached through the Skill tool, not slash commands"; else echo "FAIL slash commands the model cannot invoke:"; echo "$hits"; fail=1; fi
+hits=$(for s in $(grep -lE '\$[0-9]' skills/*/SKILL.md); do grep -q '\$ARGUMENTS' "$s" || echo "  $s: uses \$0 but never \$ARGUMENTS"; done; grep -n '나머지 `\$ARGUMENTS`' skills/*/SKILL.md)
+if [ -z "$hits" ]; then echo "ok   skills with \$0 also read the whole \$ARGUMENTS"; else echo "FAIL flags would be dropped (\$ARGUMENTS is the whole string):"; echo "$hits"; fail=1; fi
+hits=$(grep -n '/contest:init' skills/*/SKILL.md | grep -vE '^skills/(init|help)/' | grep -v '안내')
+if [ -z "$hits" ]; then echo "ok   other skills only tell the user to run /contest:init"; else echo "FAIL /contest:init is user-only (disable-model-invocation):"; echo "$hits"; fail=1; fi
+hits=$(for s in skills/*/SKILL.md; do n=$(basename "$(dirname "$s")"); [ "$n" = help ] && continue
+  row=$(grep "^| \`/contest:$n" skills/help/SKILL.md)
+  for f in $(sed -n 's/^argument-hint: //p' "$s" | grep -oE -- '--[a-z-]+' | sort -u); do printf '%s\n' "$row" | grep -qF -- "$f" || echo "  /contest:$n row lacks $f"; done
+done)
+if [ -z "$hits" ]; then echo "ok   help lists every flag of each argument-hint"; else echo "FAIL help table misses flags:"; echo "$hits"; fail=1; fi
+hits=$(for s in skills/*/SKILL.md; do at=$(sed -n 's/^allowed-tools: //p' "$s")
+  for x in $(grep -oE 'python3 -I \$\{CLAUDE_PLUGIN_ROOT\}/scripts/[a-z_]+\.py' "$s" | sed 's|.*/||' | sort -u); do
+    printf '%s\n' "$at" | grep -qF "Bash(python3 -I \${CLAUDE_PLUGIN_ROOT}/scripts/$x *)" || echo "  $s: runs $x without a matching allowed-tools rule"; done
+  for x in count_chars trace_numbers scan_placeholders; do grep -q "$x" "$s" && ! grep -q "python3 -I \${CLAUDE_PLUGIN_ROOT}/scripts/$x.py" "$s" && echo "  $s: names $x without its command"; done
+done)
+if [ -z "$hits" ]; then echo "ok   skills give script commands with matching allowed-tools rules"; else echo "FAIL script commands:"; echo "$hits"; fail=1; fi
+hits=$( { grep -rn '승인: <날짜> <사용자 문구>' agents skills; grep -rn '승인 표시' agents skills; grep -n 'mvp-plan\.md' agents/*.md skills/*/SKILL.md
+  for f in skills/spec/SKILL.md skills/make/SKILL.md agents/mvp-builder.md; do grep -q '`승인: <날짜> "<사용자 문구>"`' "$f" || echo "  $f: approval line differs from spec"; done; } )
+if [ -z "$hits" ]; then echo "ok   one approval line format; mvp-builder reads the versioned mvp-plan file"; else echo "FAIL approval line or mvp-plan path:"; echo "$hits"; fail=1; fi
+hits=$(for a in agents/*.md; do sed -n 's/^description: //p' "$a" | grep -E 'proactively|반드시|에도 사용' | grep -vq 'contest 작업 공간' && echo "  $a"; done)
+if [ -z "$hits" ]; then echo "ok   auto-triggering agent descriptions are scoped to contest workspaces"; else echo "FAIL agent descriptions that trigger outside a contest workspace:"; echo "$hits"; fail=1; fi
+hits=$(grep -rnE '4~6개|심사 기준 배점, 주최사 빈틈|여덟 단계\)' skills agents; for f in skills/topics/SKILL.md agents/topic-strategist.md; do grep -q '추천 1·차선 1' "$f" || echo "  $f: no 추천 1·차선 1 for the field choice"; done)
+if [ -z "$hits" ]; then echo "ok   topics follow topic-selection.md (field criteria, 5~6 conditions)"; else echo "FAIL topics differ from references/topic-selection.md:"; echo "$hits"; fail=1; fi
+if [ "$(grep -c -- '--only' skills/research/SKILL.md)" -ge 2 ]; then echo "ok   research says what --only does"; else echo "FAIL research takes --only but never handles it"; fail=1; fi
+hits=$(for tok in $(grep -ohE '\{\{[A-Z_]+\}\}' $(ls templates/*.md | grep -vE '/(CONTEST|CLAUDE\.workspace)\.md$') | sort -u); do grep -qF "$tok" skills/make/SKILL.md || echo "  $tok"; done)
+if [ -z "$hits" ]; then echo "ok   make fills the {{ }} that scaffold leaves in later templates"; else echo "FAIL make never says how to fill:"; echo "$hits"; fail=1; fi
 [ $fail -eq 0 ] && echo "ALL OK" || { echo "SOME FAILED"; exit 1; }

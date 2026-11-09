@@ -12,15 +12,15 @@ user-invocable: true
 | 명령 | 하는 일 | 관문 |
 |---|---|---|
 | `/contest:init <폴더> [--type dev\|idea\|ad\|application\|program]` | 작업 공간 생성(공모전 하나 = 폴더 하나) | — |
-| `/contest:research [요강 URL·파일…]` | 요강 전수 추출 → 주최사·분야·사용자·경쟁 조사 → evidence.md | — |
-| `/contest:topics` | 후보 3~5개 + 수상 관문 비교 + 단독 추천 | **관문 1: 사용자가 번호로 선택** |
+| `/contest:research [요강 URL·파일…] [--only brief\|org\|domain\|users\|competitors]` | 요강 전수 추출 → 주최사·분야·사용자·경쟁 조사 → evidence.md | — |
+| `/contest:topics [분야·후보…] [--pick N]` | 후보 3~5개 + 수상 관문 비교 + 단독 추천 | **관문 1: 사용자가 번호로 선택** |
 | `/contest:refine [--rounds N]` | 선택 주제 고도화(design.md), 모의 심사 | 관문 2: 자동 4항목 점검 |
-| `/contest:spec` | PRD·SRS·traceability 작성 | **관문 3: 사용자 승인** |
-| `/contest:make <종류> [옵션]` | 기획서·지원서·슬라이드·보충자료·화면예시·mvp-plan·mvp·project·readme·매뉴얼·시연대본·발표대본·예상질문·회고·custom | mvp는 **관문 4: mvp-plan 승인** |
-| `/contest:verify [파일…]` | 자리표시·문체·글자 수·숫자 추적·사실 검증·요강 대조 → 90-verify/report | — |
-| `/contest:judge <파일>` | 심사위원 모의(배점표 채점 + 예상 질문 10개) | — |
-| `/contest:status` | CONTEST.md 상태판 갱신·다음 할 일 | — |
-| `/contest:run <요강…>` | 1·2단계 연속 실행 후 관문 1에서 멈춤. `--continue`로 3·4단계 | 관문마다 멈춤 |
+| `/contest:spec [--from-inputs] [--update '변경 요청…']` | PRD·SRS·traceability 작성 | **관문 3: 사용자 승인** |
+| `/contest:make <종류> [--template 양식] [--limit N] [--judge] [--no-humanize]` | 기획서·지원서·슬라이드·보충자료·화면예시·mvp-plan·mvp·project·readme·매뉴얼·시연대본·발표대본·예상질문·회고·custom | mvp는 **관문 4: mvp-plan 승인** |
+| `/contest:verify [파일…] [--plain] [--limit N] [--genre body\|form\|slides] [--strict]` | 자리표시·문체·글자 수·숫자 추적·사실 검증·요강 대조 → 90-verify/report | — |
+| `/contest:judge <파일> [--round N] [--persona peer\|expert\|both]` | 심사위원 모의(배점표 채점 + 예상 질문 10개) | — |
+| `/contest:status [--fix]` | CONTEST.md 상태판 갱신·다음 할 일 | — |
+| `/contest:run <요강…>` | 1·2단계 연속 실행 후 관문 1에서 멈춤. `--continue [--pick N]`로 3·4단계, `--make <종류…>`로 5단계 | 관문마다 멈춤 |
 
 ## 지금 무엇을 해야 하나
 1. 현재 폴더(또는 상위)에 `CONTEST.md`가 없으면 → `/contest:init`.

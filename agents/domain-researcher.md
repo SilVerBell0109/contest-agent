@@ -1,6 +1,6 @@
 ---
 name: domain-researcher
-description: 공모 주제 분야의 시장·규제·기술·기존 서비스를 조사해 10-research/domain.md와 competitors.md를 만든다. 중복 점검("이거 겹치지 않을까?")에도 사용.
+description: 공모 주제 분야의 시장·규제·기술·기존 서비스를 조사해 10-research/domain.md와 competitors.md를 만든다. contest 작업 공간의 주제 중복 점검("이거 겹치지 않을까?")에도 사용.
 tools: Read, Write, Edit, Grep, Glob, WebSearch, WebFetch, Bash
 model: sonnet
 maxTurns: 60

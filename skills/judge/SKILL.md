@@ -9,6 +9,8 @@ argument-hint: "<파일 경로> [--round N] [--persona peer|expert|both]"
 초안을 쓴 쪽과 분리된 읽기 전용 검토다. 같은 파일에 대해 2회까지만(3회째는 수확 체감을 알린다). 질문 은행: `${CLAUDE_SKILL_DIR}/../../references/judge-bank.md`.
 
 ## 절차
+인자 원문: `$ARGUMENTS` — 첫 단어가 대상 파일(`$0`)이고, `--round N`(이 파일의 몇 번째 모의 심사인지, 없으면 1)과 `--persona peer|expert|both`(기본 both)를 여기서 읽는다. N이 3 이상이면 심사하지 않고 수확 체감을 알린다.
+
 1. 대상 파일(`$0`)과 `10-research/brief.md`(배점표·단계), `org.md`(민감 쟁점), `40-spec/PRD.md`·`SRS.md`를 확인한다. brief.md에 배점표가 없으면 유형별 기본 축(문제 정의·차별성·실현 가능성·기대효과·발표)을 쓰고 그 사실을 밝힌다.
 2. **contest:judge-simulator** 서브에이전트 호출. 프롬프트에 작업 공간 절대 경로, 대상 파일 절대 경로, 페르소나(`--persona`, 기본 both: 상호평가 참가자 + 주최사 실무 전문가), 사용자 기준(수상 최우선) 요약을 넣는다.
 3. 결과 저장: 응답 전문을 고도화 단계면 `30-refine/judge-preview.md`, 제출 전이면 `90-verify/judge-<파일명>-<날짜>.md`에 저장한다(contest:judge-simulator는 파일을 쓰지 않는다).

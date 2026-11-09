@@ -1,6 +1,6 @@
 ---
 name: org-researcher
-description: 주최사·주관사를 '원하는 것 / 아픈 곳 / 남들은 / 왜 지금 / 빈틈' 5단으로 조사해 10-research/org.md와 evidence.md 초안을 만든다. 주제 선정 전 proactively 사용.
+description: 주최사·주관사를 '원하는 것 / 아픈 곳 / 남들은 / 왜 지금 / 빈틈' 5단으로 조사해 10-research/org.md와 evidence.md 초안을 만든다. contest 작업 공간에서 주제 선정 전 proactively 사용.
 tools: Read, Write, Edit, Grep, Glob, WebSearch, WebFetch, Bash
 model: sonnet
 maxTurns: 60

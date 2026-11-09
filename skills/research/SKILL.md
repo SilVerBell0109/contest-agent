@@ -17,6 +17,8 @@ allowed-tools: Bash(python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/scan_placeholders.p
 ## 절차
 서브에이전트(Agent 도구)를 순서대로 부른다. 프롬프트에는 **작업 공간 절대 경로, 참조 파일 절대 경로(`${CLAUDE_SKILL_DIR}/../../references/…`), 템플릿 경로, 유형**을 넣는다. 서브에이전트는 대화 맥락을 모른다.
 
+`--only <부분>`이면 해당 서브에이전트만 부른다: brief → contest:brief-analyst, org → contest:org-researcher, domain·competitors → contest:domain-researcher(요청한 파일 하나만 쓰라고 지시), users → contest:user-researcher. 이때 5(유형 보강)는 부른 서브에이전트 몫만, 6(통합 점검)은 그 파일만 한다(스캔 명령의 파일 목록도 그 파일 하나로). 7(1단계 완료 표시)은 하지 않는다.
+
 1. **contest:brief-analyst** → `10-research/brief.md`, CONTEST.md 기본 정보. 결과에서 "운영진에게 물을 것"과 "가장 위험한 제약"을 사용자에게 바로 보여 준다.
 2. **contest:org-researcher** → `10-research/org.md`, `30-refine/evidence.md` E-ID 등록 시작.
 3. **contest:domain-researcher** → `10-research/domain.md`, `10-research/competitors.md`(두 축 중복 점검). 2·3은 병렬 가능.

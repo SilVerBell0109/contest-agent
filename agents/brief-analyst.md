@@ -1,6 +1,6 @@
 ---
 name: brief-analyst
-description: 공모전 요강·양식·심사 기준·Q&A를 전수 추출해 10-research/brief.md를 채운다. 요강 URL이나 PDF가 주어졌을 때 proactively 사용.
+description: 공모전 요강·양식·심사 기준·Q&A를 전수 추출해 10-research/brief.md를 채운다. contest 작업 공간에서 요강 URL이나 PDF가 주어졌을 때 proactively 사용.
 tools: Read, Write, Edit, Grep, Glob, WebSearch, WebFetch, Bash
 model: sonnet
 maxTurns: 40

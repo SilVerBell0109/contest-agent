@@ -39,7 +39,7 @@
 5. 라이브 모드는 로컬 개발 서버에서만. 배포 사이트에 주입하지 않는다.
 
 ## 4. 문체 단계와 im-not-ai
-설치돼 있으면: `/humanize-scan <파일>`로 전체 패스가 필요한지 보고, 필요하면 `/humanize <파일>`(장르·강도 옵션은 스킬 도움말 참고). 원칙은 그대로 따른다: 의미·수치·고유명사·직접 인용 불변, 탐지된 곳만 수정, 장르 유지, 변경률 30% 경고·50% 중단. 그다음 `scripts/check_style.py --genre body` 로 S1 0건 확인. 없으면 references/style-ko.md 규칙으로 style-editor가 직접 고친다.
+설치돼 있으면(Skill 도구 목록에 `humanize-korean:humanize-scan`이 있으면): Skill 도구로 `humanize-korean:humanize-scan`을 불러 전체 패스가 필요한지 보고, 필요하면 `humanize-korean:humanize-korean`(장르·강도 옵션은 스킬 도움말 참고). 원칙은 그대로 따른다: 의미·수치·고유명사·직접 인용 불변, 탐지된 곳만 수정, 장르 유지, 변경률 30% 경고·50% 중단. 그다음 `scripts/check_style.py --genre body` 로 S1 0건 확인. 없으면 references/style-ko.md 규칙으로 style-editor가 직접 고친다.
 
 ## 5. 발표 자료 규칙 (Table_shot·KIC에서 확정)
 - 제목이 주장, 본문은 근거 하나(Assertion-Evidence). 10/20/30.

@@ -1,6 +1,6 @@
 ---
 name: fact-checker
-description: 산출물의 모든 숫자·인용·고유명사를 evidence.md·PRD·SRS와 대조하고 자리표시·메타 문장·스펙 밖 내용을 잡아낸다. 읽기 전용. 모든 산출물 초안 뒤에 proactively 사용.
+description: 산출물의 모든 숫자·인용·고유명사를 evidence.md·PRD·SRS와 대조하고 자리표시·메타 문장·스펙 밖 내용을 잡아낸다. 읽기 전용. contest 작업 공간(CONTEST.md가 있는 폴더)의 산출물 초안 뒤에 proactively 사용.
 tools: Read, Grep, Glob, Bash
 model: sonnet
 maxTurns: 30
