@@ -21,6 +21,22 @@ expect 1 python3 -I $S/count_chars.py $T/clean-body.txt --limit 100
 expect 0 python3 -I $S/count_chars.py $T/clean-body.txt --limit 5000
 expect 1 python3 -I $S/trace_numbers.py $T/numbers.md --against $T/evidence.md
 expect 0 python3 -I $S/trace_numbers.py $T/numbers.md --against $T/evidence.md --warn
+tn=$(mktemp -d); tnum() { python3 -I $S/trace_numbers.py "$@"; }
+printf '| E037 | 참가 인원 | 미정 | 출처 | 2026-11-05 | 2026-11-05 | ✅ |\n' > "$tn/ev.md"
+printf '| E001 | 모집 | 300명 | 출처 | 2026-10-01 | 2026-11-05 | ✅ |\n' > "$tn/ev2.md"
+t() { printf '%s\n' "$2" > "$tn/$1.md"; }
+t eid '참가 인원은 37명입니다.';            expect 1 tnum "$tn/eid.md" --against "$tn/ev.md"
+t date '모집은 11명입니다.';                expect 1 tnum "$tn/date.md" --against "$tn/ev.md"
+t comma '참가자는 2,000명입니다.';          expect 1 tnum "$tn/comma.md" --against "$tn/ev.md"
+t unit '예산은 2025억 원입니다.';           expect 1 tnum "$tn/unit.md" --against "$tn/ev.md"
+t hangul '공시는 총525건입니다.';           expect 1 tnum "$tn/hangul.md" --against "$tn/ev.md"
+t dotted '2026.11.09 기준으로 정리했습니다.'; expect 0 tnum "$tn/dotted.md" --against "$tn/ev.md"
+t kdate '2026년 10월 1일 300명 모집, 제12회 대회.'; expect 0 tnum "$tn/kdate.md" --against "$tn/ev2.md"
+expect 1 tnum "$tn/eid.md" --against "$tn/eid.md"
+out=$(tnum "$tn/eid.md" --against "$tn/ev.md" "$tn/none.md" 2>&1)
+if echo "$out" | grep -q "대조 파일 없음"; then echo "ok   trace_numbers warns on a missing --against file"; else echo "FAIL trace_numbers silent on a missing --against file"; fail=1; fi
+expect 2 tnum "$tn/none.md" --against "$tn/ev.md"
+rm -rf "$tn"
 tmp=$(mktemp -d); mkdir -p "$tmp/50-deliverables"; cp $T/placeholders-and-ai-style.md "$tmp/50-deliverables/x.md"
 out=$(echo "{\"tool_input\":{\"file_path\":\"$tmp/50-deliverables/x.md\"}}" | CLAUDE_PLUGIN_ROOT=$PWD bash $S/post_write_check.sh); rc=$?
 if [ $rc -eq 0 ] && echo "$out" | grep -q "자리표시"; then echo "ok   (0) hook warns"; else echo "FAIL hook"; fail=1; fi
