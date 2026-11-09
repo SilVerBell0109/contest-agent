@@ -151,4 +151,9 @@ hits=$( { grep -qF '슬라이드·발표대본 → **contest:deck-builder**' ski
   grep -E '^- `슬라이드`' skills/make/SKILL.md | grep -qF '2(사실 검증)·3(문체)·4(검수)를 outline.md에 실행' || echo "  skills/make: slides reach deck-builder unchecked"
   grep -qF '`.pptx`' skills/verify/SKILL.md || echo "  skills/verify: runs the text scripts on .pptx"; } )
 if [ -z "$hits" ]; then echo "ok   slides are checked as outline.md before deck-builder; verify skips binaries"; else echo "FAIL slide checks would run on a .pptx:"; echo "$hits"; fail=1; fi
+scan1='python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/scan_placeholders.py 10-research/brief.md 10-research/org.md 10-research/domain.md 10-research/competitors.md 10-research/users.md --allow 가정,예시값,확인,자리표시'
+hits=$( for f in skills/status/SKILL.md skills/research/SKILL.md; do grep -qF -- "\`$scan1\`" "$f" || echo "  $f: stage-1 scan is not the shared 5-file command with 자리표시 allowed"; done
+  grep -qF '`10-research/`·`40-spec/`·`50-deliverables/` 문서와 CONTEST.md의 `【 】`' skills/status/SKILL.md || echo "  skills/status: 【 】 count skips 10-research/ and CONTEST.md" )
+if [ -z "$hits" ]; then echo "ok   stage 1 allows the user's 【 】 and status/research scan the same files"; else echo "FAIL stage 1 can never pass (users.md must keep 【 】):"; echo "$hits"; fail=1; fi
+u1=$(mktemp -d); printf '# 사용자\n- 팀원 경험: 【 】\n- 월 10명 [가정]\n' > "$u1/users.md"; expect 1 scanp "$u1/users.md" --allow 가정,예시값,확인; expect 0 scanp "$u1/users.md" --allow 가정,예시값,확인,자리표시; rm -rf "$u1"
 [ $fail -eq 0 ] && echo "ALL OK" || { echo "SOME FAILED"; exit 1; }

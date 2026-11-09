@@ -28,7 +28,7 @@ allowed-tools: Bash(python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/scan_placeholders.p
    - evidence.md의 E-ID 번호 중복·누락, ✅/⚠️/❓ 개수.
    - 네 문서가 서로 어긋나는 사실(예: 주최사 인원 수가 org와 domain에서 다름)을 찾아 evidence에 "상충" 표기.
    - 기한·분량을 CONTEST.md 기본 정보 표(공식 마감·실질 마감·제출물 행)에 옮긴다. 세부는 brief.md §2(분량·형식)·§7(금지 사항)·§8(일정표)에 둔다.
-   - `python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/scan_placeholders.py 10-research/brief.md 10-research/org.md 10-research/domain.md 10-research/competitors.md 10-research/users.md --allow 가정,예시값,확인`(이 형태 그대로, 따옴표 없이, 다른 명령과 `;`·`&&`로 잇지 말고 단독으로 — 허용 규칙과 같아야 승인 없이 실행된다)로 추측 채움이 없는지 확인.
+   - `python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/scan_placeholders.py 10-research/brief.md 10-research/org.md 10-research/domain.md 10-research/competitors.md 10-research/users.md --allow 가정,예시값,확인,자리표시`(이 형태 그대로, 따옴표 없이, 다른 명령과 `;`·`&&`로 잇지 말고 단독으로 — 허용 규칙과 같아야 승인 없이 실행된다)로 추측 채움이 없는지 확인. contest:user-researcher가 남긴 `【 】`(사용자 경험·팀원 정보)은 허용한다(`/contest:status` 1단계 스캔과 같은 명령).
 7. CONTEST.md "단계와 관문" 표에서 1단계를 완료로 바꾸고 날짜를 적는다. 네 문서가 빈 템플릿 그대로이거나 evidence.md에 채워진 E-ID가 없으면 완료로 바꾸지 않는다(`/contest:status` 1단계 기준과 같다).
 
 ## 사용자에게 보고(짧게, 번호로)
