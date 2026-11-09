@@ -167,3 +167,4 @@
 - Ruling: W22 기호 이모지(U+2600~27BF: ✅❌❶★⚠)는 본문(body)에서만 S1, 양식(form)·슬라이드(slides)에서는 S2 — 소마·KIC 양식의 비교표와 슬라이드 번호가 S1로 막혀 정상 산출물이 실패했다. 그림 이모지(🚀 등 U+1F300~)는 모든 장르 S1 유지 — 비용: 매뉴얼은 body로 검사하므로 좋은 예/나쁜 예의 ✅/❌는 여전히 S1로 막히고, 양식·슬라이드의 기호는 S2 안내만 남아 `--strict`에서 3개 이상일 때만 실패한다.
 - Ruling: 리듬 검사를 '~습니다.'에서 '~니다.'로 넓힘 — '~입니다.'로 끝나는 합쇼체 6연속을 놓쳤다 — 비용: 합쇼체 본문에 S2 리듬 지적이 늘지만 실패는 `--strict`에서 6연속 이상일 때뿐이다.
 - 진행: W22 check_style 기호 이모지 장르별 등급·리듬 '~니다.', style-editor 리듬 문구. run.sh form 표 ✅❌ → 0, slides ❶❷❸ → 0, "rhythm counts every '~니다.' ending" RED→GREEN(+ body ✅ → 1, slides 🚀 → 1 회귀 가드, clean-body `--strict` 통과 유지), suite 98/98.
+- 진행: W23 topic-strategist 카드를 templates/topics.md §1의 11항목 이름·순서로 맞춤. 옛 항목 중 템플릿에 없던 것(○△×, 데이터 공개 여부, 핵심 기술, 리스크, 예상 첫 질문)은 가장 가까운 행의 괄호 안으로 옮김. run.sh "topic-strategist writes the 11-row card of templates/topics.md §1"(템플릿 행을 직접 읽어 대조, 11행 아니면 실패) RED→GREEN, suite 99/99.

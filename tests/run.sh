@@ -169,4 +169,9 @@ if grep -qF '사용자 담당 ❌만 남으면 그 목록(위치 포함)을 보�
 g2=$(awk '/^## 관문 2 —/{f=1;print;next} /^## /{f=0} f' skills/refine/SKILL.md)
 hits=$(for w in '문제 크기' '여기서만 되는 기능' '범위 경계' '성공 기준 표' 'process.md' 'CONTEST.md 관문 2 행 비고'; do printf '%s\n' "$g2" | grep -qF -- "$w" || echo "  관문 2 lacks: $w"; done)
 if [ -z "$hits" ]; then echo "ok   refine 관문 2 checks the four process.md §2 items"; else echo "FAIL refine 관문 2 differs from references/process.md §2 and CONTEST.md:"; echo "$hits"; fail=1; fi
+rows=$(awk '/^### 후보 A/{f=1;next} /^### /{f=0} f && /^\| / && !/^\| 항목 / && !/^\|---/' templates/topics.md | sed -e 's/^| //' -e 's/ *|.*$//' -e 's/ *(.*$//')
+hits=$( [ "$(printf '%s\n' "$rows" | grep -c .)" -eq 11 ] || echo "  templates/topics.md §1 card no longer has 11 rows"
+  printf '%s\n' "$rows" | while IFS= read -r r; do grep -qF -- "$r" agents/topic-strategist.md || echo "  topic-strategist lacks: $r"; done
+  grep -n '한 줄 정의 / 사용자와 장면' agents/topic-strategist.md )
+if [ -z "$hits" ]; then echo "ok   topic-strategist writes the 11-row card of templates/topics.md §1"; else echo "FAIL topic-strategist card differs from templates/topics.md §1:"; echo "$hits"; fail=1; fi
 [ $fail -eq 0 ] && echo "ALL OK" || { echo "SOME FAILED"; exit 1; }
