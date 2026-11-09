@@ -175,3 +175,5 @@
 - Ruling: style-editor가 말투 가이드를 '파일 없음' 말고 다른 이유(권한·허용 폴더 밖)로 못 읽으면 멈추지 않고 style-ko.md만으로 진행하되, 보고와 90-verify 기록 머리에 경로와 허용 규칙을 남긴다 — 무인 실행에서 문체 단계 전체가 멈추는 것보다 낫고, 조용히 '없음'으로 치던 것이 문제였다 — 비용: 그 회차의 문체는 사용자 말투 대신 기본 규칙으로 고쳐져, 규칙을 넣은 뒤 다시 돌려야 한다.
 - 진행: critic-7 후반 style-editor 입력에 읽기 거부 처리, 보고 형식에 '말투 가이드: 적용/없음/읽기 거부'. run.sh "style-editor reports a refused tone-guide read instead of treating it as absent" RED→GREEN, suite 102/102.
 - 진행: 문서 정리 CLAUDE_CODE_PROMPT.md:66·plan.md:52·:78의 말투 가이드 복사 위치를 references/style/에서 `${CLAUDE_PLUGIN_DATA}/style/user-report-tone.md`로(init 4단계·style-ko 머리·style-editor와 같은 곳). 이 기록 파일의 옛 언급(:65·:92)은 이력이라 그대로 둠. run.sh "no doc sends the tone guide to references/style/" RED(3건)→GREEN, suite 103/103.
+- Ruling: 버전 0.1.1(패치) — 동작 범위는 그대로이고 기존 기능의 오류 수정뿐이다. 자동 업데이트가 꺼져 있어 version을 올려야 설치본이 갱신된다 — 비용: 없음(되돌릴 일이 생겨도 0.1.2로 올리면 된다).
+- 진행: 릴리스 plugin.json 0.1.1, `claude plugin validate .` rc=0(경고: 아이콘 없음, 기존과 같음), suite 103/103.
