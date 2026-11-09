@@ -33,6 +33,15 @@ rm -f "$s2"
 expect 2 python3 -I $S/check_style.py $T/clean-body.txt --genre essay
 expect 2 python3 -I $S/check_style.py $T/clean-body.txt --genre
 expect 2 python3 -I $S/check_style.py $T/no-such-file.md
+cs=$(mktemp -d); cst() { python3 -I $S/check_style.py "$@"; }
+printf '| 기능 | 기존 | 제안 |\n|---|---|---|\n| 오프라인 | ✅ | ❌ |\n' > "$cs/form.md"; expect 0 cst "$cs/form.md" --genre form
+printf '❶ 문제 ❷ 해결 ❸ 효과\n' > "$cs/slides.md"; expect 0 cst "$cs/slides.md" --genre slides
+printf '검증 결과 ✅ 통과입니다.\n' > "$cs/body.md"; expect 1 cst "$cs/body.md" --genre body
+printf '🚀 출시 계획\n' > "$cs/rocket.md"; expect 1 cst "$cs/rocket.md" --genre slides
+printf '이것은 사과입니다. 저것은 배입니다. 그것은 감입니다. 여기는 집입니다. 거기는 학교입니다. 저기는 공원입니다.\n' > "$cs/rhythm.md"
+out=$(cst "$cs/rhythm.md" --genre body --strict 2>&1); rc=$?
+if [ $rc -eq 1 ] && printf '%s\n' "$out" | grep -qF "리듬: '~니다.' 연속 6"; then echo "ok   (1) rhythm counts every '~니다.' ending, not only '~습니다.'"; else echo "FAIL (got $rc) rhythm missed six '~입니다.' endings"; fail=1; fi
+rm -rf "$cs"
 expect 1 python3 -I $S/count_chars.py $T/clean-body.txt --limit 100
 expect 0 python3 -I $S/count_chars.py $T/clean-body.txt --limit 5000
 cntc() { python3 -I $S/count_chars.py "$@"; }

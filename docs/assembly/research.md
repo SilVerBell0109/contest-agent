@@ -164,3 +164,6 @@
 - Ruling: DC-09(materials/research.md:342-354 claude.ai 대화 링크 13개)는 비공개인 동안 그대로 둔다 — 링크는 로그인한 소유자만 열리고 저장소가 비공개다. 공개 전환 전 점검 목록에 남긴다 — 비용: 저장소를 공개로 돌리면서 이 줄을 놓치면 대화 주소가 노출된다.
 - Ruling: DC-18(플레이북 "1,091줄")은 고치지 않음 — 파일은 줄바꿈으로 끝나는 1090줄이고 편집기는 1,091줄로 보인다. materials/는 보호 대상이고 playbook.md는 gitignore — 비용: `wc -l`로 세는 사람에게 1 차이가 보인다.
 - 진행: W15 refine 관문 2가 process.md §2 4항목(문제 크기·여기서만 되는 기능 둘·범위 경계·성공 기준 표)을 보도록 고침. 기존 4개(숫자 추적·자리표시·예상 질문 절 번호·심사 기준 대응)는 '관문 2 전 사전 점검'으로 옮기고 명령은 그대로. run.sh "refine 관문 2 checks the four process.md §2 items" RED→GREEN, suite 93/93.
+- Ruling: W22 기호 이모지(U+2600~27BF: ✅❌❶★⚠)는 본문(body)에서만 S1, 양식(form)·슬라이드(slides)에서는 S2 — 소마·KIC 양식의 비교표와 슬라이드 번호가 S1로 막혀 정상 산출물이 실패했다. 그림 이모지(🚀 등 U+1F300~)는 모든 장르 S1 유지 — 비용: 매뉴얼은 body로 검사하므로 좋은 예/나쁜 예의 ✅/❌는 여전히 S1로 막히고, 양식·슬라이드의 기호는 S2 안내만 남아 `--strict`에서 3개 이상일 때만 실패한다.
+- Ruling: 리듬 검사를 '~습니다.'에서 '~니다.'로 넓힘 — '~입니다.'로 끝나는 합쇼체 6연속을 놓쳤다 — 비용: 합쇼체 본문에 S2 리듬 지적이 늘지만 실패는 `--strict`에서 6연속 이상일 때뿐이다.
+- 진행: W22 check_style 기호 이모지 장르별 등급·리듬 '~니다.', style-editor 리듬 문구. run.sh form 표 ✅❌ → 0, slides ❶❷❸ → 0, "rhythm counts every '~니다.' ending" RED→GREEN(+ body ✅ → 1, slides 🚀 → 1 회귀 가드, clean-body `--strict` 통과 유지), suite 98/98.
