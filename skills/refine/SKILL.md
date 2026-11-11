@@ -7,7 +7,7 @@ allowed-tools: Bash(python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/trace_numbers.py *)
 
 # /contest:refine — 3단계 고도화 (관문 2)
 
-고도화의 계기는 항상 사용자의 한 줄이었다("더 자세히 조사해줘", "KIC라서 넣을 기능은?", "심사위원이 뭘 물을까?"). `$ARGUMENTS`에 그 한 줄이 있으면 그것이 이번 라운드의 목표다. 없으면 아래 라운드 순서를 따른다(라운드마다 겨냥할 방향은 `${CLAUDE_SKILL_DIR}/../../references/design-patterns.md` §5).
+고도화의 계기는 항상 사용자의 한 줄이었다("더 자세히 조사해줘", "이 주최사라서 넣을 기능은?", "심사위원이 뭘 물을까?"). `$ARGUMENTS`에 그 한 줄이 있으면 그것이 이번 라운드의 목표다. 없으면 아래 라운드 순서를 따른다(라운드마다 겨냥할 방향은 `${CLAUDE_SKILL_DIR}/../../references/design-patterns.md` §5).
 
 ## 사전 확인
 - `20-topics/topics.md`의 관문 1 기록(선택 번호)이 없으면 `/contest:topics`로 돌려보낸다.

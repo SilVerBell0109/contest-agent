@@ -3,7 +3,7 @@
 """한국어 산출물의 AI-티·번역투·문체 규칙 위반을 센다 (결정적 1차 검사).
 
 im-not-ai(humanize-korean)의 심각도 체계(S1 결정적 / S2 3회 이상이면 문제 / S3 겹칠 때만)와
-하나증권 기획서 B-7 문체 기준을 합쳐 만든 간이 검사기다. LLM 없이 돌아간다.
+실제 기획서 퇴고 기록의 B-7 문체 기준(references/style-ko.md §2)을 합쳐 만든 간이 검사기다. LLM 없이 돌아간다.
 
 사용법:
   python3 check_style.py <파일...> [--genre body|form|slides] [--strict] [--json]

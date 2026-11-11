@@ -7,7 +7,7 @@ allowed-tools: Bash(python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/trace_numbers.py *)
 
 # /contest:topics — 2단계 주제 추천 (관문 1)
 
-기준은 사용자가 정했다: 수상 최우선 → 취업 목표(금융권 백엔드) 연결 → 겹치지 않음 → 기간 내 구현 가능. `${CLAUDE_SKILL_DIR}/../../references/user-criteria.md`와 `topic-selection.md`를 먼저 읽는다.
+기준은 사용자가 정했다: 수상 최우선 → 취업 목표(사용자 프로필의 진로 목표) 연결 → 겹치지 않음 → 기간 내 구현 가능. `${CLAUDE_SKILL_DIR}/../../references/user-criteria.md`와 `topic-selection.md`를 먼저 읽는다. 사용자 프로필 `${CLAUDE_PLUGIN_DATA}/profile/user-profile.md`가 있으면 함께 읽고, 없으면 진로 목표를 사용자에게 묻는다(추정하지 않는다).
 
 ## 사전 확인
 - `10-research/brief.md`·`org.md`가 없거나 빈 템플릿 그대로면(`/contest:status` 1단계 기준) `/contest:research`를 먼저 안내하고 멈춘다(근거 없는 후보는 만들지 않는다).
@@ -30,7 +30,7 @@ allowed-tools: Bash(python3 -I ${CLAUDE_PLUGIN_ROOT}/scripts/trace_numbers.py *)
 - "내가 판단할 수 있도록 자세히" → 비교표를 맨 앞에, 추천은 뒤에.
 - "무조건 수상하고 싶은데" → 관문 비교표 기준으로만 답한다.
 - "이거 겹치지 않을까?" → 두 축 중복 표로 답하고, 해외 사례는 실현 가능성 근거로 바꾸어 설명.
-- "직무 관련으로" → 백엔드 요소가 큰 후보로 재정렬.
+- "직무 관련으로" → 프로필의 진로 목표(직무) 요소가 큰 후보로 재정렬.
 
 ## 금지
 - 후보를 하나만 내거나, 추천 없이 비교표만 내는 것(사용자가 명시적으로 원할 때 제외).

@@ -67,7 +67,7 @@ t eid '참가 인원은 120명입니다.';           expect 1 tnum "$tn/eid.md" 
 t date '모집은 11명입니다.';                expect 1 tnum "$tn/date.md" --against "$tn/ev.md"
 t comma '참가자는 2,000명입니다.';          expect 1 tnum "$tn/comma.md" --against "$tn/ev.md"
 t unit '예산은 2025억 원입니다.';           expect 1 tnum "$tn/unit.md" --against "$tn/ev.md"
-t hangul '공시는 총525건입니다.';           expect 1 tnum "$tn/hangul.md" --against "$tn/ev.md"
+t hangul '민원은 총318건입니다.';           expect 1 tnum "$tn/hangul.md" --against "$tn/ev.md"
 t dotted '2026.11.09 기준으로 정리했습니다.'; expect 0 tnum "$tn/dotted.md" --against "$tn/ev.md"
 t kdate '2026년 10월 1일 300명 모집, 제12회 대회.'; expect 0 tnum "$tn/kdate.md" --against "$tn/ev2.md"
 tgrep() { local want=$1 msg=$2; shift 2; if tnum "$@" 2>&1 | grep -q "미추적 ${want}개"; then echo "ok   trace_numbers $msg"; else echo "FAIL trace_numbers $msg (want 미추적 ${want}개)"; fail=1; fi; }

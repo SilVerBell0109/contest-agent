@@ -2,7 +2,7 @@
 
 공모전 조사 → 주제 추천 → 고도화 → PRD·SRS → 기획서·슬라이드·MVP·발표자료 제작 → 검수까지를 Claude Code 안에서 진행합니다. 모든 산출물은 PRD·SRS와 근거 원장(evidence.md, E-ID)에서만 내용을 가져오고, 근거 없는 숫자는 쓰지 않습니다.
 
-실제 공모전 8건(코스콤 AI Agent Challenge 우수상, SW마에스트로, 알파프로젝트, 하나증권, KIC, 현대차 오도, DCA, 패크크)의 작업 기록에서 뽑은 절차·기준·실수 목록이 들어 있습니다.
+실제 공모전 8건(코스콤 AI Agent Challenge 우수상, SW마에스트로, 알파프로젝트, 하나증권, KIC, 현대차, DCA, 패크크)의 작업 기록에서 뽑은 절차·기준·실수 목록이 들어 있습니다.
 
 ## 설치
 
@@ -44,7 +44,7 @@
 
 | 단계 | 명령 | 관문 |
 |---|---|---|
-| 0 | `/contest:init 하나증권-2026 --type idea` | 공모전 하나 = 폴더 하나 |
+| 0 | `/contest:init 아이디어공모-2026 --type idea` | 공모전 하나 = 폴더 하나 |
 | 1 | `/contest:research https://…요강` | 요강 전수 추출, 주최사·분야·사용자·경쟁 조사, evidence.md |
 | 2 | `/contest:topics` | 후보 3~5 + 수상 관문 비교 + 단독 추천 → **사용자가 번호로 선택** |
 | 3 | `/contest:refine` | 고도화 라운드 + 모의 심사 → 자동 4항목 점검 |
@@ -80,7 +80,7 @@
 
 ## 구성
 
-- `skills/` 11개 명령(`/contest:*`), `agents/` 12개 서브에이전트, `hooks/` 저장 후 점검, `scripts/` 6개, `templates/` 23개, `references/` 절차·기준·사례(cases/ 8건), `materials/` 원자료(연구 보고서). 플레이북 `materials/playbook.md`는 팀원 실명·팀 문서 링크가 있어 저장소에 올리지 않고 소유자 기기에만 둡니다(플러그인 실행에는 쓰지 않음).
+- `skills/` 11개 명령(`/contest:*`), `agents/` 12개 서브에이전트, `hooks/` 저장 후 점검, `scripts/` 6개, `templates/` 23개, `references/` 절차·기준·사례(cases/ 5건), `materials/` 원자료(연구 보고서). 플레이북 `materials/playbook.md`는 팀원 실명·팀 문서 링크가 있어 저장소에 올리지 않고 소유자 기기에만 둡니다(플러그인 실행에는 쓰지 않음).
 - 사용자 원칙: 기획과 코딩 분리(승인 전 코드 금지) · 테스트 먼저 · 요청한 것만 · any 금지 · 시크릿은 .env · 본문은 합쇼체+1인칭, AI 티 제거.
 
 ## 라이선스

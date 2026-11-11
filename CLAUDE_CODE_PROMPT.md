@@ -6,7 +6,7 @@
 
 ## 맥락
 
-나는 최종은(국민대 소프트웨어학부, SW마에스트로 17기, 목표: 금융권 백엔드 개발자). 이 폴더는 내가 공모전을 준비할 때 쓸 Claude Code 플러그인 `contest`의 소스다. 실제 공모전 8건(코스콤 우수상, 소마, 알파프로젝트, 하나증권, KIC, 현대차 오도, DCA, 패크크)의 작업 기록에서 뽑은 절차·기준·실수 목록이 `references/`와 `materials/`에 들어 있다.
+나는 최종은. 이 폴더는 내가 공모전을 준비할 때 쓸 Claude Code 플러그인 `contest`의 소스다. 실제 공모전 8건(코스콤 우수상, 소마, 알파프로젝트, 하나증권, KIC, 현대차, DCA, 패크크)의 작업 기록에서 뽑은 절차·기준·실수 목록이 `references/`와 `materials/`에 들어 있다.
 
 플러그인의 목표: 공모전 요강을 주면 **① 조사(주최사·분야·사용자·경쟁) → ② 주제 추천(내가 선택) → ③ 고도화 → ④ PRD·SRS(내가 승인) → ⑤ 내가 지시하는 산출물(기획서·슬라이드·화면예시·MVP·본 프로젝트·README·매뉴얼·발표자료) 제작·검수**를 원스텝으로 진행하되, 근거(E-ID) 없는 숫자와 PRD·SRS 밖의 내용은 절대 만들지 않는 것이다. 외부 플러그인 pbakaus/impeccable(UI)와 epoko77-ai/im-not-ai(한국어 AI 티 제거)는 복사하지 않고 설치해 호출한다.
 
@@ -19,7 +19,7 @@
 6. any 타입 금지. API 키·시크릿은 .env에만.
 
 ## 자료 위치
-- 플러그인: `.claude-plugin/`, `skills/`(11), `agents/`(12), `hooks/`, `scripts/`(6), `templates/`(23), `references/`(+cases/ 8).
+- 플러그인: `.claude-plugin/`, `skills/`(11), `agents/`(12), `hooks/`, `scripts/`(6), `templates/`(23), `references/`(+cases/ 5).
 - 설계 근거: `plan.md`(제작 계획·파일 트리·수용 기준·열린 질문), `materials/research.md`(채팅 분석), `materials/playbook.md`(원자료 플레이북).
 - 규칙 요약: `CLAUDE.md`(저장소 규칙), `README.md`(사용자용).
 
@@ -79,7 +79,7 @@
 - `references/`·`templates/`·`materials/`의 **내용(규칙·사례·문장)** 을 다시 쓰거나 "개선"하지 않는다. 형식 오류(YAML·경로·치환)만 고친다.
 - impeccable·im-not-ai의 코드나 규칙을 이 저장소로 복사하지 않는다.
 - 실제 공모전 조사(웹 검색)를 드라이런에서 하지 않는다. 가상 요강으로만.
-- 내 이력·팀원 정보를 어디에도 추가하지 않는다(`references/user-criteria.md` §5에 있는 확인된 사실만 유지).
+- 내 이력·팀원 정보를 어디에도 추가하지 않는다(내 이력은 PC 전용 `~/.claude/plugins/data/contest-contest-agent/profile/user-profile.md`에만 둔다).
 - 테스트 없이 "확인했다"고 보고하지 않는다. 실행 결과(명령과 출력 요약)를 함께 보고한다.
 
 ---
